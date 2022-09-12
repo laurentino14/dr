@@ -4,3 +4,18 @@
 body {
         @apply bg-neutral-100 font-roboto text-dark;
 }
+
+html {
+        scroll-behavior: smooth;
+}
+
+*::-webkit-scrollbar {
+        @apply bg-dark;
+        width: 0.4rem;
+}
+
+*::-webkit-scrollbar-thumb {
+        background-color: #ffb703;
+        border-radius: 50px;
+        width: 0.4rem;
+}

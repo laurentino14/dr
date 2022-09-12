@@ -1,5 +1,6 @@
 import type {NextPage} from "next";
 import Head from "next/head";
+import Link from "next/link";
 import {AiFillBook} from "react-icons/ai";
 import {GrTechnology} from "react-icons/gr";
 import {MdDirectionsBoat} from "react-icons/md";
@@ -57,12 +58,12 @@ const Home: NextPage = () => {
         </div>
         <div className='bg-black w-1/2 h-[28rem] drop-shadow-2xl'></div>
         <div>
-          <a
-            href=''
-            className='flex gap-3 hover:brightness-90 drop-shadow-md items-center justify-center font-raj bg-primary px-6 py-2 rounded-md font-medium text-2xl'>
-            <AiFillBook />
-            VER CURSOS
-          </a>
+          <Link href='/cursos' passHref>
+            <a className='flex gap-3 hover:bg-yellow-500 transition-colors drop-shadow-md items-center justify-center font-raj bg-primary px-6 py-2 rounded-md font-medium text-2xl'>
+              <AiFillBook />
+              VER CURSOS
+            </a>
+          </Link>
         </div>
       </section>
     </main>
