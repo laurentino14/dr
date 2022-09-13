@@ -9,7 +9,7 @@ module.exports = {
         "poppins": "Poppins",
       },
       colors: {
-        "dark": "#222222",
+        "dark": "#111111",
         "primary":"#FFB703"
       }
     },

@@ -7,14 +7,18 @@ export const Header = () => {
   return (
     <>
       <header className='w-full h-20 flex justify-center gap-52 px-40 items-center'>
-        <div>
-          <Image
-            src='/logo.png'
-            width={100}
-            height={100}
-            alt='Logomarca da Dev Running'
-          />
-        </div>
+        <Link href='/' passHref>
+          <a>
+            <Image
+              src='/logo.png'
+              width={100}
+              height={100}
+              alt='Logomarca da Dev Running'
+              className='hover:brightness-200'
+            />
+          </a>
+        </Link>
+
         <div className='flex items-center justify-center gap-14 font-medium'>
           <Link href='/' passHref>
             <a
@@ -38,20 +42,18 @@ export const Header = () => {
           </Link>
         </div>
         <div className='flex gap-12'>
-          <Link href='/cursos' passHref>
-            <a
-              href=''
-              className='uppercase font-raj font-bold pt-3 pb-2 px-4 flex gap-1 hover:text-neutral-600 transition-colors'>
+          <Link href='/signin' passHref>
+            <a className='uppercase font-raj font-bold pt-3 pb-2 px-4 flex gap-1 hover:text-neutral-600 transition-colors'>
               <MdDirectionsBoat className='mt-[0.17rem]' />
               Entrar
             </a>
           </Link>
 
-          <a
-            href=''
-            className='uppercase font-raj drop-shadow-lg hover:bg-yellow-400 font-bold h-auto pb-2 px-4 bg-primary rounded-md flex items-center pt-3 transition-all'>
-            Criar conta
-          </a>
+          <Link href='/signup' passHref>
+            <a className='uppercase font-raj drop-shadow-lg hover:bg-yellow-400 font-bold h-auto pb-2 px-4 bg-primary rounded-md flex items-center pt-3 transition-all'>
+              Criar conta
+            </a>
+          </Link>
         </div>
       </header>
       {/* <div className='w-full h-2 bg-dark mb-20'></div> */}

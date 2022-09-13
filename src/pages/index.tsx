@@ -38,7 +38,7 @@ const Home: NextPage = () => {
           <MdDirectionsBoat className='text-9xl scale-[300%] drop-shadow-md' />
         </div>
       </section>
-      <section className='w-full flex flex-col justify-center gap-40 items-center pb-60 bg-gradient-to-b from-[#111] to-black  text-dark py-4 px-20 drop-shadow-2xl'>
+      <section className='w-full flex flex-col justify-center gap-40 items-center pb-60 bg-gradient-to-b from-dark to-black  text-dark py-4 px-20 drop-shadow-2xl'>
         <div className='flex justify-center items-center pt-20 gap-40'>
           <div className='bg-green-500 rounded-lg drop-shadow-xl p-10'>
             <GrTechnology className='text-9xl' />

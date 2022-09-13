@@ -19,3 +19,9 @@ html {
         border-radius: 50px;
         width: 0.4rem;
 }
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+        opacity: 0;
+        -webkit-appearance: none;
+}
