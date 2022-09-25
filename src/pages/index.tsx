@@ -8,11 +8,11 @@ import {TbWaveSawTool} from "react-icons/tb";
 
 const Home: NextPage = () => {
   return (
-    <main className='w-full  flex flex-col items-center justify-center gap-10 pt-40 '>
+    <main className='w-full  flex flex-col items-center justify-center gap-10 pt-40'>
       <Head>
         <title>Dev Running - Descobrindo o futuro</title>
       </Head>
-      <section className='w-full  flex justify-center items-center flex-col  gap-72 mb-80 '>
+      <section className='w-full  flex justify-center items-center flex-col  gap-72 mb-80'>
         <div className='flex flex-col items-center justify-center'>
           <div className='text-5xl font-bold font-raj uppercase flex gap-10'>
             <TbWaveSawTool className='animate-pulse' />
