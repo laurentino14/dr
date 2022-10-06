@@ -1,0 +1,7 @@
+mutation auth($password: String, $email: String, $token:String){
+  authentication(input:{email:$email,password:$password, token:$token}){
+    
+    token_user
+   
+  }
+}

@@ -1,0 +1,14 @@
+query getAllUsers {
+  users {
+    id
+    firstname
+    lastname
+    email
+    password
+    cellphone
+    token_user
+    Enrollment {
+      id
+    }
+  }
+}
