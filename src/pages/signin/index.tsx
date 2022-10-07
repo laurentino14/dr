@@ -1,26 +1,18 @@
-import Cookie from "js-cookie";
+import {GetServerSideProps} from "next";
 import Head from "next/head";
 import Link from "next/link";
-import {useState} from "react";
+import {parseCookies} from "nookies";
+import {useContext, useState} from "react";
 import {MdDirectionsBoat, MdEmail} from "react-icons/md";
 import {RiLockPasswordFill} from "react-icons/ri";
-import {useAuthMutation} from "../../generated/graphql";
+import {AuthContext} from "../../context/AuthContext";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState(null);
 
-  const [useAuthMut, {data}] = useAuthMutation({
-    variables: {email, password},
-  });
-
-  async function SetAuth(data) {
-    setTimeout(() => {
-      Cookie.set("auth", data);
-    }, 50);
-    return Cookie.get("auth");
-  }
+  const {signIn} = useContext(AuthContext);
 
   return (
     <main className='mt-40 flex items-center justify-center'>
@@ -33,7 +25,6 @@ export default function SignIn() {
           <h1 className='text-4xl font-raj font-bold uppercase'>Entrar</h1>
           <MdDirectionsBoat className='text-4xl' />
         </div>
-
         <div className='flex justify-center items-center gap-5 relative'>
           <MdEmail className='absolute left-3 z-50' />
           <input
@@ -65,11 +56,7 @@ export default function SignIn() {
         <div className='flex justify-center items-center gap-5'>
           <button
             onClick={e => {
-              useAuthMut().then(res =>
-                SetAuth(res.data.authentication.token_user).then(res =>
-                  console.log(res),
-                ),
-              );
+              signIn({email, password});
             }}
             className='uppercase bg-primary w-96 rounded-md py-3 font-medium hover:bg-yellow-400'>
             Entrar
@@ -79,3 +66,20 @@ export default function SignIn() {
     </main>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async ctx => {
+  const {["auth"]: token} = parseCookies(ctx);
+
+  if (token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

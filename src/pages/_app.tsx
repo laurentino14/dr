@@ -1,5 +1,6 @@
 import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
 import type {AppProps} from "next/app";
+import {AuthProvider} from "../context/AuthContext";
 import "../styles/global.css";
 import "../styles/tailwind.css";
 export const client = new ApolloClient({
@@ -9,7 +10,9 @@ export const client = new ApolloClient({
 function MyApp({Component, pageProps}: AppProps) {
   return (
     <ApolloProvider client={client}>
-      <Component {...pageProps} />
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
     </ApolloProvider>
   );
 }

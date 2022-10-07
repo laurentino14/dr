@@ -1,0 +1,10 @@
+query GetUserAuthenticated($token: String){
+  userAuthenticated(input:{token:$token}){
+    id
+    firstname
+    lastname
+    email
+    cellphone
+    token_user
+  }
+}

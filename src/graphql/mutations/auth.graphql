@@ -1,6 +1,11 @@
 mutation auth($password: String, $email: String, $token:String){
   authentication(input:{email:$email,password:$password, token:$token}){
     
+        id
+    firstname
+  	lastname
+    email
+    cellphone
     token_user
    
   }

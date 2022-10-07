@@ -47,6 +47,10 @@ export type Enrollment = {
   userId: Scalars['String'];
 };
 
+export type GetUserAuthInput = {
+  token?: InputMaybe<Scalars['String']>;
+};
+
 export type Lesson = {
   __typename?: 'Lesson';
   created_at?: Maybe<Scalars['Date']>;
@@ -144,7 +148,13 @@ export type Query = {
   enrollments?: Maybe<Array<Maybe<Enrollment>>>;
   lessons?: Maybe<Array<Maybe<Lesson>>>;
   steps?: Maybe<Array<Maybe<Step>>>;
+  userAuthenticated: UserAuthenticated;
   users?: Maybe<Array<Maybe<User>>>;
+};
+
+
+export type QueryUserAuthenticatedArgs = {
+  input?: InputMaybe<GetUserAuthInput>;
 };
 
 export type Step = {
@@ -172,6 +182,16 @@ export type User = {
   token_user?: Maybe<Scalars['String']>;
 };
 
+export type UserAuthenticated = {
+  __typename?: 'UserAuthenticated';
+  cellphone?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  firstname?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  lastname?: Maybe<Scalars['String']>;
+  token_user?: Maybe<Scalars['String']>;
+};
+
 export type AuthMutationVariables = Exact<{
   password?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
@@ -179,17 +199,29 @@ export type AuthMutationVariables = Exact<{
 }>;
 
 
-export type AuthMutation = { __typename?: 'Mutation', authentication: { __typename?: 'User', token_user?: string | null } };
+export type AuthMutation = { __typename?: 'Mutation', authentication: { __typename?: 'User', id: string, firstname: string, lastname: string, email: string, cellphone: string, token_user?: string | null } };
 
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllUsersQuery = { __typename?: 'Query', users?: Array<{ __typename?: 'User', id: string, firstname: string, lastname: string, email: string, password: string, cellphone: string, token_user?: string | null, Enrollment?: Array<{ __typename?: 'Enrollment', id: string } | null> | null } | null> | null };
 
+export type GetUserAuthenticatedQueryVariables = Exact<{
+  token?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetUserAuthenticatedQuery = { __typename?: 'Query', userAuthenticated: { __typename?: 'UserAuthenticated', id?: string | null, firstname?: string | null, lastname?: string | null, email?: string | null, cellphone?: string | null, token_user?: string | null } };
+
 
 export const AuthDocument = gql`
     mutation auth($password: String, $email: String, $token: String) {
   authentication(input: {email: $email, password: $password, token: $token}) {
+    id
+    firstname
+    lastname
+    email
+    cellphone
     token_user
   }
 }
@@ -265,3 +297,43 @@ export function useGetAllUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetAllUsersQueryHookResult = ReturnType<typeof useGetAllUsersQuery>;
 export type GetAllUsersLazyQueryHookResult = ReturnType<typeof useGetAllUsersLazyQuery>;
 export type GetAllUsersQueryResult = Apollo.QueryResult<GetAllUsersQuery, GetAllUsersQueryVariables>;
+export const GetUserAuthenticatedDocument = gql`
+    query GetUserAuthenticated($token: String) {
+  userAuthenticated(input: {token: $token}) {
+    id
+    firstname
+    lastname
+    email
+    cellphone
+    token_user
+  }
+}
+    `;
+
+/**
+ * __useGetUserAuthenticatedQuery__
+ *
+ * To run a query within a React component, call `useGetUserAuthenticatedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserAuthenticatedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserAuthenticatedQuery({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useGetUserAuthenticatedQuery(baseOptions?: Apollo.QueryHookOptions<GetUserAuthenticatedQuery, GetUserAuthenticatedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserAuthenticatedQuery, GetUserAuthenticatedQueryVariables>(GetUserAuthenticatedDocument, options);
+      }
+export function useGetUserAuthenticatedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserAuthenticatedQuery, GetUserAuthenticatedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserAuthenticatedQuery, GetUserAuthenticatedQueryVariables>(GetUserAuthenticatedDocument, options);
+        }
+export type GetUserAuthenticatedQueryHookResult = ReturnType<typeof useGetUserAuthenticatedQuery>;
+export type GetUserAuthenticatedLazyQueryHookResult = ReturnType<typeof useGetUserAuthenticatedLazyQuery>;
+export type GetUserAuthenticatedQueryResult = Apollo.QueryResult<GetUserAuthenticatedQuery, GetUserAuthenticatedQueryVariables>;
