@@ -1,17 +1,21 @@
-import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
+import {ApolloProvider} from "@apollo/client";
 import type {AppProps} from "next/app";
-import {AuthProvider} from "../context/AuthContext";
+import {useContext} from "react";
+import {Footer} from "../components/footer";
+import {Header} from "../components/header";
+import {AuthContext, AuthProvider} from "../context/AuthContext";
+import {client} from "../http/apollo";
 import "../styles/global.css";
 import "../styles/tailwind.css";
-export const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  uri: "http://localhost:3131/graphql",
-});
+
 function MyApp({Component, pageProps}: AppProps) {
+  const {user} = useContext(AuthContext);
   return (
     <ApolloProvider client={client}>
       <AuthProvider>
+        <Header />
         <Component {...pageProps} />
+        <Footer />
       </AuthProvider>
     </ApolloProvider>
   );

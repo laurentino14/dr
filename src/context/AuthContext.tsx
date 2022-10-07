@@ -1,11 +1,11 @@
 import {useRouter} from "next/dist/client/router";
-import {parseCookies, setCookie} from "nookies";
+import {destroyCookie, parseCookies, setCookie} from "nookies";
 import {createContext, useEffect, useState} from "react";
 import {
   GetUserAuthenticatedDocument,
   useAuthMutation,
 } from "../graphql/graphql";
-import {client} from "../pages/_app";
+import {client} from "../http/apollo";
 
 type AuthContext = {
   user: User;
@@ -19,6 +19,7 @@ type User = {
   email: string;
   cellphone: string;
   token_user: string;
+  logged: false | boolean;
 };
 
 type signInData = {
@@ -51,12 +52,15 @@ export function AuthProvider({children}) {
               email: data.data.userAuthenticated.email,
               token_user: data.data.userAuthenticated.token_user,
               cellphone: data.data.userAuthenticated.cellphone,
+              logged: true,
             }),
-          )
-          .then();
+          );
       } catch (err) {
-        console.log(err);
+        setUser(null);
       }
+    } else {
+      setUser(null);
+      destroyCookie(undefined, "auth");
     }
   }, []);
 
@@ -69,6 +73,7 @@ export function AuthProvider({children}) {
         firstname: res.data.authentication.firstname,
         lastname: res.data.authentication.lastname,
         token_user: res.data.authentication.token_user,
+        logged: true,
       });
 
       setCookie(undefined, "auth", res.data.authentication.token_user, {
