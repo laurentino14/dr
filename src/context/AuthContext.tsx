@@ -80,7 +80,7 @@ export function AuthProvider({children}) {
         maxAge: 60 * 60 * 24 * 2,
       });
 
-      push("/");
+      push("/app").then();
     });
   }
 

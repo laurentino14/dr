@@ -1,6 +1,7 @@
 import {GetServerSideProps} from "next";
 import Head from "next/head";
 import Link from "next/link";
+import {useRouter} from "next/router";
 import {parseCookies} from "nookies";
 import {useContext, useState} from "react";
 import {MdDirectionsBoat, MdEmail} from "react-icons/md";
@@ -11,6 +12,7 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState(null);
+  const {push} = useRouter();
 
   const {signIn} = useContext(AuthContext);
 
@@ -57,6 +59,7 @@ export default function SignIn() {
           <button
             onClick={e => {
               signIn({email, password});
+              push("/app");
             }}
             className='uppercase bg-primary w-96 rounded-md py-3 font-medium hover:bg-yellow-400'>
             Entrar

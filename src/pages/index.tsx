@@ -1,15 +1,12 @@
 import type {NextPage} from "next";
 import Head from "next/head";
 import Link from "next/link";
-import {useContext} from "react";
 import {AiFillBook} from "react-icons/ai";
 import {GrTechnology} from "react-icons/gr";
 import {MdDirectionsBoat} from "react-icons/md";
 import {TbWaveSawTool} from "react-icons/tb";
-import {AuthContext} from "../context/AuthContext";
 
 const Home: NextPage = () => {
-  const {signIn, user} = useContext(AuthContext);
   return (
     <main className='w-full  flex flex-col items-center justify-center gap-10 pt-40'>
       <Head>
