@@ -99,16 +99,15 @@ export type MutationCreateStepArgs = {
 
 
 export type MutationCreateUserArgs = {
-  input: NewUser;
+  input?: InputMaybe<NewUser>;
 };
 
 export type NewCourse = {
   created_at?: InputMaybe<Scalars['Date']>;
   description?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['String']>;
   image?: InputMaybe<Scalars['String']>;
-  slug: Scalars['String'];
-  title: Scalars['String'];
+  slug?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['Date']>;
 };
 
@@ -134,12 +133,11 @@ export type NewStep = {
 };
 
 export type NewUser = {
-  cellphone: Scalars['String'];
-  email: Scalars['String'];
-  firstname: Scalars['String'];
-  id?: InputMaybe<Scalars['String']>;
-  lastname: Scalars['String'];
-  password: Scalars['String'];
+  cellphone?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  firstname?: InputMaybe<Scalars['String']>;
+  lastname?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -173,12 +171,12 @@ export type Step = {
 export type User = {
   __typename?: 'User';
   Enrollment?: Maybe<Array<Maybe<Enrollment>>>;
-  cellphone: Scalars['String'];
-  email: Scalars['String'];
-  firstname: Scalars['String'];
-  id: Scalars['String'];
-  lastname: Scalars['String'];
-  password: Scalars['String'];
+  cellphone?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  firstname?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  lastname?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
   token_user?: Maybe<Scalars['String']>;
 };
 
@@ -199,12 +197,28 @@ export type AuthMutationVariables = Exact<{
 }>;
 
 
-export type AuthMutation = { __typename?: 'Mutation', authentication: { __typename?: 'User', id: string, firstname: string, lastname: string, email: string, cellphone: string, token_user?: string | null } };
+export type AuthMutation = { __typename?: 'Mutation', authentication: { __typename?: 'User', id?: string | null, firstname?: string | null, lastname?: string | null, email?: string | null, cellphone?: string | null, token_user?: string | null } };
+
+export type CreatUserMutationVariables = Exact<{
+  firstname?: InputMaybe<Scalars['String']>;
+  lastname?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  cellphone?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CreatUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', email?: string | null, password?: string | null } };
+
+export type GetAllCoursesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllCoursesQuery = { __typename?: 'Query', courses?: Array<{ __typename?: 'Course', id: string, title: string, image?: string | null, slug: string, description?: string | null, created_at: any, updated_at: any } | null> | null };
 
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', users?: Array<{ __typename?: 'User', id: string, firstname: string, lastname: string, email: string, password: string, cellphone: string, token_user?: string | null, Enrollment?: Array<{ __typename?: 'Enrollment', id: string } | null> | null } | null> | null };
+export type GetAllUsersQuery = { __typename?: 'Query', users?: Array<{ __typename?: 'User', id?: string | null, firstname?: string | null, lastname?: string | null, email?: string | null, password?: string | null, cellphone?: string | null, token_user?: string | null, Enrollment?: Array<{ __typename?: 'Enrollment', id: string } | null> | null } | null> | null };
 
 export type GetUserAuthenticatedQueryVariables = Exact<{
   token?: InputMaybe<Scalars['String']>;
@@ -254,6 +268,86 @@ export function useAuthMutation(baseOptions?: Apollo.MutationHookOptions<AuthMut
 export type AuthMutationHookResult = ReturnType<typeof useAuthMutation>;
 export type AuthMutationResult = Apollo.MutationResult<AuthMutation>;
 export type AuthMutationOptions = Apollo.BaseMutationOptions<AuthMutation, AuthMutationVariables>;
+export const CreatUserDocument = gql`
+    mutation creatUser($firstname: String, $lastname: String, $email: String, $password: String, $cellphone: String) {
+  createUser(
+    input: {firstname: $firstname, lastname: $lastname, email: $email, password: $password, cellphone: $cellphone}
+  ) {
+    email
+    password
+  }
+}
+    `;
+export type CreatUserMutationFn = Apollo.MutationFunction<CreatUserMutation, CreatUserMutationVariables>;
+
+/**
+ * __useCreatUserMutation__
+ *
+ * To run a mutation, you first call `useCreatUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [creatUserMutation, { data, loading, error }] = useCreatUserMutation({
+ *   variables: {
+ *      firstname: // value for 'firstname'
+ *      lastname: // value for 'lastname'
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *      cellphone: // value for 'cellphone'
+ *   },
+ * });
+ */
+export function useCreatUserMutation(baseOptions?: Apollo.MutationHookOptions<CreatUserMutation, CreatUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatUserMutation, CreatUserMutationVariables>(CreatUserDocument, options);
+      }
+export type CreatUserMutationHookResult = ReturnType<typeof useCreatUserMutation>;
+export type CreatUserMutationResult = Apollo.MutationResult<CreatUserMutation>;
+export type CreatUserMutationOptions = Apollo.BaseMutationOptions<CreatUserMutation, CreatUserMutationVariables>;
+export const GetAllCoursesDocument = gql`
+    query getAllCourses {
+  courses {
+    id
+    title
+    image
+    slug
+    description
+    created_at
+    updated_at
+  }
+}
+    `;
+
+/**
+ * __useGetAllCoursesQuery__
+ *
+ * To run a query within a React component, call `useGetAllCoursesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllCoursesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllCoursesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllCoursesQuery(baseOptions?: Apollo.QueryHookOptions<GetAllCoursesQuery, GetAllCoursesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllCoursesQuery, GetAllCoursesQueryVariables>(GetAllCoursesDocument, options);
+      }
+export function useGetAllCoursesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllCoursesQuery, GetAllCoursesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllCoursesQuery, GetAllCoursesQueryVariables>(GetAllCoursesDocument, options);
+        }
+export type GetAllCoursesQueryHookResult = ReturnType<typeof useGetAllCoursesQuery>;
+export type GetAllCoursesLazyQueryHookResult = ReturnType<typeof useGetAllCoursesLazyQuery>;
+export type GetAllCoursesQueryResult = Apollo.QueryResult<GetAllCoursesQuery, GetAllCoursesQueryVariables>;
 export const GetAllUsersDocument = gql`
     query getAllUsers {
   users {

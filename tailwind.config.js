@@ -4,14 +4,14 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        "raj": "Rajdhani",
-        "roboto": "Roboto",
-        "poppins": "Poppins",
+        raj: "Rajdhani",
+        roboto: "Roboto",
+        poppins: "Poppins",
       },
       colors: {
-        "dark": "#111111",
-        "primary":"#FFB703"
-      }
+        dark: "#111111",
+        primary: "#FFB703",
+      },
     },
   },
   plugins: [],

@@ -8,8 +8,9 @@ import {
 import {client} from "../http/apollo";
 
 type AuthContext = {
-  user: User;
+  user: User | "erro" | null;
   signIn: (data: signInData) => Promise<void>;
+  signOut: () => void;
 };
 
 type User = {
@@ -30,7 +31,7 @@ type signInData = {
 export const AuthContext = createContext({} as AuthContext);
 
 export function AuthProvider({children}) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null | "erro">(null);
   const [reqUser, _] = useAuthMutation();
   const {push} = useRouter();
 
@@ -56,7 +57,7 @@ export function AuthProvider({children}) {
             }),
           );
       } catch (err) {
-        setUser(null);
+        setUser("erro");
       }
     } else {
       setUser(null);
@@ -84,8 +85,14 @@ export function AuthProvider({children}) {
     });
   }
 
+  function signOut() {
+    setUser(null);
+    destroyCookie(undefined, "auth");
+    push("/").then();
+  }
+
   return (
-    <AuthContext.Provider value={{signIn, user}}>
+    <AuthContext.Provider value={{signIn, user, signOut}}>
       {children}
     </AuthContext.Provider>
   );

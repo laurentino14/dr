@@ -2,7 +2,6 @@ import Image from "next/future/image";
 import Link from "next/link";
 import {FaHome} from "react-icons/fa";
 import {MdDirectionsBoat} from "react-icons/md";
-
 export const HeaderNotLogged = () => {
   return (
     <header className='w-full h-20 flex justify-center gap-52 px-40 items-center'>
@@ -28,7 +27,7 @@ export const HeaderNotLogged = () => {
           </a>
         </Link>
 
-        <Link href='/cursos' passHref>
+        <Link href='/courses' passHref>
           <a className='hover:text-neutral-600 transition-colors'>Cursos</a>
         </Link>
         <Link href='/blog' passHref>

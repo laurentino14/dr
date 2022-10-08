@@ -1,0 +1,6 @@
+mutation creatUser($firstname: String, $lastname: String, $email: String, $password: String, $cellphone:String){
+  createUser(input:{firstname:$firstname, lastname:$lastname, email:$email , password:$password, cellphone:$cellphone}){
+    email
+    password
+  }
+}
