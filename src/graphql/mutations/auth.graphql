@@ -4,6 +4,8 @@ mutation auth($password: String, $email: String, $token:String){
         id
     firstname
   	lastname
+    avatar
+    username
     email
     cellphone
     token_user

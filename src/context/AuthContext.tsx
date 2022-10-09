@@ -8,19 +8,20 @@ import {
 import {client} from "../http/apollo";
 
 type AuthContext = {
-  user: User | "erro" | null;
+  user: User | null;
   signIn: (data: signInData) => Promise<void>;
   signOut: () => void;
 };
 
-type User = {
+export type User = {
   id: string;
   firstname: string;
   lastname: string;
+  username: string;
   email: string;
+  avatar: string;
   cellphone: string;
   token_user: string;
-  logged: false | boolean;
 };
 
 type signInData = {
@@ -31,9 +32,9 @@ type signInData = {
 export const AuthContext = createContext({} as AuthContext);
 
 export function AuthProvider({children}) {
-  const [user, setUser] = useState<User | null | "erro">(null);
+  const [user, setUser] = useState<User | null>(null);
   const [reqUser, _] = useAuthMutation();
-  const {push} = useRouter();
+  const {reload, push} = useRouter();
 
   useEffect(() => {
     const {auth: token} = parseCookies();
@@ -51,13 +52,15 @@ export function AuthProvider({children}) {
               firstname: data.data.userAuthenticated.firstname,
               lastname: data.data.userAuthenticated.lastname,
               email: data.data.userAuthenticated.email,
+              username: data.data.userAuthenticated.username,
+              avatar: data.data.userAuthenticated.avatar,
               token_user: data.data.userAuthenticated.token_user,
               cellphone: data.data.userAuthenticated.cellphone,
-              logged: true,
             }),
           );
       } catch (err) {
-        setUser("erro");
+        setUser(null);
+        destroyCookie(undefined, "auth");
       }
     } else {
       setUser(null);
@@ -71,24 +74,28 @@ export function AuthProvider({children}) {
         id: res.data.authentication.id,
         cellphone: res.data.authentication.cellphone,
         email: res.data.authentication.email,
+        avatar: res.data.authentication.avatar,
+        username: res.data.authentication.username,
         firstname: res.data.authentication.firstname,
         lastname: res.data.authentication.lastname,
         token_user: res.data.authentication.token_user,
-        logged: true,
       });
-
+      destroyCookie(undefined, "auth");
       setCookie(undefined, "auth", res.data.authentication.token_user, {
         maxAge: 60 * 60 * 24 * 2,
       });
 
-      push("/app").then();
+      reload();
     });
   }
 
   function signOut() {
     setUser(null);
     destroyCookie(undefined, "auth");
-    push("/").then();
+
+    setTimeout(() => {
+      reload();
+    }, 300);
   }
 
   return (

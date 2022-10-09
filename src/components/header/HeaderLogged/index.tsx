@@ -5,7 +5,7 @@ import {FaSignOutAlt} from "react-icons/fa";
 export const HeaderLogged = ({signOut, user}) => {
   return (
     <>
-      <header className='w-full h-20 flex justify-center gap-52 px-40 items-center'>
+      <header className='w-full h-20 bg-neutral-100 flex justify-center gap-52 px-40 items-center'>
         <Link href='/app' passHref>
           <a>
             <Image
@@ -46,8 +46,15 @@ export const HeaderLogged = ({signOut, user}) => {
               MEUS CURSOS
             </a>
           </Link>
-          <div className='h-auto flex items-center justify-center'>
-            {user?.avatar}
+          <div className='h-auto flex items-center rounded-full justify-center'>
+            <Image
+              className='rounded-full drop-shadow-md aspect-square'
+              src={user?.avatar ? user?.avatar : "/pp.jpg"}
+              quality={100}
+              width={45}
+              height={45}
+              alt=''
+            />
           </div>
           <Link href='/app/profile/settings' passHref>
             <a

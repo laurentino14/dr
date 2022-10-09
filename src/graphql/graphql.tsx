@@ -15,6 +15,7 @@ export type Scalars = {
   Float: number;
   Any: any;
   Date: any;
+  Upload: any;
 };
 
 export type AuthenticationInput = {
@@ -29,9 +30,9 @@ export type Course = {
   Lessons?: Maybe<Array<Maybe<Lesson>>>;
   Steps?: Maybe<Array<Maybe<Step>>>;
   created_at: Scalars['Date'];
-  description?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
   id: Scalars['String'];
-  image?: Maybe<Scalars['String']>;
+  image: Scalars['String'];
   slug: Scalars['String'];
   title: Scalars['String'];
   updated_at: Scalars['Date'];
@@ -41,9 +42,9 @@ export type Enrollment = {
   __typename?: 'Enrollment';
   courseId: Scalars['String'];
   created_at: Scalars['Date'];
-  deleted_at?: Maybe<Scalars['Date']>;
+  deleted_at: Scalars['Date'];
   id: Scalars['String'];
-  updated_at?: Maybe<Scalars['Date']>;
+  updated_at: Scalars['Date'];
   userId: Scalars['String'];
 };
 
@@ -135,19 +136,21 @@ export type NewStep = {
 export type NewUser = {
   cellphone?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
+  file?: InputMaybe<Scalars['Upload']>;
   firstname?: InputMaybe<Scalars['String']>;
   lastname?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  courses?: Maybe<Array<Maybe<Course>>>;
-  enrollments?: Maybe<Array<Maybe<Enrollment>>>;
+  courses: Array<Course>;
+  enrollments: Array<Enrollment>;
   lessons?: Maybe<Array<Maybe<Lesson>>>;
   steps?: Maybe<Array<Maybe<Step>>>;
   userAuthenticated: UserAuthenticated;
-  users?: Maybe<Array<Maybe<User>>>;
+  users: Array<User>;
 };
 
 
@@ -170,24 +173,28 @@ export type Step = {
 
 export type User = {
   __typename?: 'User';
-  Enrollment?: Maybe<Array<Maybe<Enrollment>>>;
-  cellphone?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  firstname?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['String']>;
-  lastname?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  token_user?: Maybe<Scalars['String']>;
+  Enrollment: Array<Maybe<Enrollment>>;
+  avatar?: Maybe<Scalars['String']>;
+  cellphone: Scalars['String'];
+  email: Scalars['String'];
+  firstname: Scalars['String'];
+  id: Scalars['String'];
+  lastname: Scalars['String'];
+  password: Scalars['String'];
+  token_user: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type UserAuthenticated = {
   __typename?: 'UserAuthenticated';
+  avatar?: Maybe<Scalars['String']>;
   cellphone?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   firstname?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   lastname?: Maybe<Scalars['String']>;
   token_user?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
 };
 
 export type AuthMutationVariables = Exact<{
@@ -197,7 +204,7 @@ export type AuthMutationVariables = Exact<{
 }>;
 
 
-export type AuthMutation = { __typename?: 'Mutation', authentication: { __typename?: 'User', id?: string | null, firstname?: string | null, lastname?: string | null, email?: string | null, cellphone?: string | null, token_user?: string | null } };
+export type AuthMutation = { __typename?: 'Mutation', authentication: { __typename?: 'User', id: string, firstname: string, lastname: string, avatar?: string | null, username: string, email: string, cellphone: string, token_user: string } };
 
 export type CreatUserMutationVariables = Exact<{
   firstname?: InputMaybe<Scalars['String']>;
@@ -205,27 +212,29 @@ export type CreatUserMutationVariables = Exact<{
   email?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
   cellphone?: InputMaybe<Scalars['String']>;
+  file?: InputMaybe<Scalars['Upload']>;
+  username?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type CreatUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', email?: string | null, password?: string | null } };
+export type CreatUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', email: string, password: string } };
 
 export type GetAllCoursesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllCoursesQuery = { __typename?: 'Query', courses?: Array<{ __typename?: 'Course', id: string, title: string, image?: string | null, slug: string, description?: string | null, created_at: any, updated_at: any } | null> | null };
+export type GetAllCoursesQuery = { __typename?: 'Query', courses: Array<{ __typename?: 'Course', id: string, title: string, image: string, slug: string, description: string, created_at: any, updated_at: any }> };
 
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', users?: Array<{ __typename?: 'User', id?: string | null, firstname?: string | null, lastname?: string | null, email?: string | null, password?: string | null, cellphone?: string | null, token_user?: string | null, Enrollment?: Array<{ __typename?: 'Enrollment', id: string } | null> | null } | null> | null };
+export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, firstname: string, lastname: string, email: string, password: string, cellphone: string, token_user: string, Enrollment: Array<{ __typename?: 'Enrollment', id: string } | null> }> };
 
 export type GetUserAuthenticatedQueryVariables = Exact<{
   token?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetUserAuthenticatedQuery = { __typename?: 'Query', userAuthenticated: { __typename?: 'UserAuthenticated', id?: string | null, firstname?: string | null, lastname?: string | null, email?: string | null, cellphone?: string | null, token_user?: string | null } };
+export type GetUserAuthenticatedQuery = { __typename?: 'Query', userAuthenticated: { __typename?: 'UserAuthenticated', id?: string | null, firstname?: string | null, lastname?: string | null, avatar?: string | null, username?: string | null, email?: string | null, cellphone?: string | null, token_user?: string | null } };
 
 
 export const AuthDocument = gql`
@@ -234,6 +243,8 @@ export const AuthDocument = gql`
     id
     firstname
     lastname
+    avatar
+    username
     email
     cellphone
     token_user
@@ -269,9 +280,9 @@ export type AuthMutationHookResult = ReturnType<typeof useAuthMutation>;
 export type AuthMutationResult = Apollo.MutationResult<AuthMutation>;
 export type AuthMutationOptions = Apollo.BaseMutationOptions<AuthMutation, AuthMutationVariables>;
 export const CreatUserDocument = gql`
-    mutation creatUser($firstname: String, $lastname: String, $email: String, $password: String, $cellphone: String) {
+    mutation creatUser($firstname: String, $lastname: String, $email: String, $password: String, $cellphone: String, $file: Upload, $username: String) {
   createUser(
-    input: {firstname: $firstname, lastname: $lastname, email: $email, password: $password, cellphone: $cellphone}
+    input: {firstname: $firstname, lastname: $lastname, email: $email, password: $password, cellphone: $cellphone, username: $username, file: $file}
   ) {
     email
     password
@@ -298,6 +309,8 @@ export type CreatUserMutationFn = Apollo.MutationFunction<CreatUserMutation, Cre
  *      email: // value for 'email'
  *      password: // value for 'password'
  *      cellphone: // value for 'cellphone'
+ *      file: // value for 'file'
+ *      username: // value for 'username'
  *   },
  * });
  */
@@ -397,6 +410,8 @@ export const GetUserAuthenticatedDocument = gql`
     id
     firstname
     lastname
+    avatar
+    username
     email
     cellphone
     token_user

@@ -8,6 +8,8 @@ const nextConfig = {
       "github.com",
       "cdn.freebiesupply.com",
       "www.returngis.net",
+      "localhost",
+      "img.freepik.com",
     ],
   },
 };

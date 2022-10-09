@@ -61,7 +61,6 @@ export default function SignIn() {
             <button
               onClick={e => {
                 signIn({email, password});
-                push("/app");
               }}
               className='uppercase bg-primary w-96 rounded-md py-3 font-medium hover:bg-yellow-400'>
               Entrar
