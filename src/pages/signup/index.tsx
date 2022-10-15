@@ -3,12 +3,12 @@ import Head from "next/head";
 import Image from "next/image";
 import {useRouter} from "next/router";
 import {useContext, useEffect, useState} from "react";
-import {BsFillPersonFill, BsPhoneVibrateFill} from "react-icons/bs";
+import {BsFillPersonFill} from "react-icons/bs";
 import {MdAlternateEmail, MdDirectionsBoat, MdEmail} from "react-icons/md";
 import {RiLockFill, RiLockPasswordFill} from "react-icons/ri";
 import {HeaderNotLogged} from "../../components/header/HeaderNotLogged";
 import {AuthContext} from "../../context/AuthContext";
-import {CreatUserDocument} from "../../graphql/graphql";
+import {CreateUserDocument} from "../../graphql/graphql";
 import {client} from "../../http/apollo";
 export default function SignUp() {
   const [firstname, setFirstname] = useState("");
@@ -16,7 +16,6 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
-  const [cellphone, setCellphone] = useState("");
   const [username, setUsername] = useState("admin");
   const [error, setError] = useState<null | string>(null);
   const [file, setFile] = useState<any>(null);
@@ -42,7 +41,6 @@ export default function SignUp() {
     email: string,
     password: string,
     password2: string,
-    cellphone: string,
     username: string,
     file: any,
   ) {
@@ -50,20 +48,16 @@ export default function SignUp() {
       return setError("As senhas não são iguais!");
     }
 
-    if (
-      (firstname && lastname && email && password && password2 && cellphone) !=
-      ""
-    ) {
+    if ((firstname && lastname && email && password && password2) != "") {
       if (file !== null) {
         return await client
           .mutate({
-            mutation: CreatUserDocument,
+            mutation: CreateUserDocument,
             variables: {
               firstname: firstname,
               lastname: lastname,
               email: email,
               password: password,
-              cellphone: cellphone,
               username: username,
               file: file,
             },
@@ -79,13 +73,12 @@ export default function SignUp() {
       } else if (file === null) {
         return await client
           .mutate({
-            mutation: CreatUserDocument,
+            mutation: CreateUserDocument,
             variables: {
               firstname: firstname,
               lastname: lastname,
               email: email,
               password: password,
-              cellphone: cellphone,
               username: username,
               file: new File([], ""),
             },
@@ -108,7 +101,6 @@ export default function SignUp() {
         <Head>
           <title>Dev Running - Crie uma conta</title>
         </Head>
-        {cellphone}
         <section className='w-96 pb-40 flex justify-start items-center gap-5 flex-col'>
           <div className='mb-10 flex w-[31.3rem] justify-center items-center gap-10'>
             {" "}
@@ -158,32 +150,6 @@ export default function SignUp() {
               className='focus:drop-shadow-sm w-60 h-10 px-9 rounded-md font-medium placeholder:font-light'
               required
             />
-            <BsPhoneVibrateFill className='absolute right-[13.3rem] z-50' />
-            <input
-              placeholder='(xx) x xxxxxxxx'
-              type='tel'
-              onChange={event =>
-                setCellphone(
-                  `(${event?.target.value[0] + event?.target.value[1]})${" "}${
-                    event?.target.value[2]
-                  }${" "} ${
-                    event?.target.value[3] +
-                    event?.target.value[4] +
-                    event?.target.value[5] +
-                    event?.target.value[6] +
-                    event?.target.value[7] +
-                    event?.target.value[8] +
-                    event?.target.value[9] +
-                    event?.target.value[10]
-                  } `,
-                )
-              }
-              minLength={11}
-              pattern='[0-9]{2}-[0-9]{1}-[0-9]{4}-[0-9]{4}'
-              maxLength={11}
-              className='focus:drop-shadow-sm w-60 h-10 px-9 rounded-md font-medium placeholder:font-light'
-              required
-            />
           </div>
 
           <div className='flex justify-center items-center gap-5 relative'>
@@ -204,7 +170,6 @@ export default function SignUp() {
               required
             />
           </div>
-          {error}
           <span className='w-full font-medium -mb-4'>
             Escolha uma foto de perfil{" "}
             <sup className='text-red-500 text-lg'>*</sup>
@@ -253,7 +218,6 @@ export default function SignUp() {
                   email,
                   password,
                   password2,
-                  cellphone,
                   username,
                   file,
                 )

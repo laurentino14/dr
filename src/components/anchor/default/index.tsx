@@ -1,9 +1,10 @@
 import Link from "next/link";
 
-export const AnchorDefault = ({value, href}) => {
+export const AnchorDefault = ({value, href, className}) => {
   return (
     <Link href={href} passHref>
-      <a className='uppercase w-28 flex items-center justify-center font-raj drop-shadow-lg hover:bg-yellow-400 font-bold h-auto pb-2 px-4 bg-primary rounded-md  pt-3 transition-all'>
+      <a
+        className={` ${className}  flex items-center justify-center  hover:drop-shadow-2xl   h-auto   rounded-md   transition-all`}>
         {value}
       </a>
     </Link>

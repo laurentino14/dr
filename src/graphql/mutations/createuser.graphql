@@ -1,5 +1,5 @@
-mutation creatUser($firstname: String, $lastname: String, $email: String, $password: String, $cellphone:String,$file: Upload, $username: String){
-  createUser(input:{firstname:$firstname, lastname:$lastname, email:$email , password:$password, cellphone:$cellphone, username:$username, file: $file}){
+mutation createUser($firstname: String, $lastname: String, $email: String, $password: String,  $file: Upload, $username: String){
+  createUser(input:{firstname:$firstname, lastname:$lastname, email:$email, password:$password, username:$username, file:$file}){
     email
     password
   }

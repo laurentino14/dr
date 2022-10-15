@@ -20,7 +20,6 @@ export type User = {
   username: string;
   email: string;
   avatar: string;
-  cellphone: string;
   token_user: string;
 };
 
@@ -55,7 +54,6 @@ export function AuthProvider({children}) {
               username: data.data.userAuthenticated.username,
               avatar: data.data.userAuthenticated.avatar,
               token_user: data.data.userAuthenticated.token_user,
-              cellphone: data.data.userAuthenticated.cellphone,
             }),
           );
       } catch (err) {
@@ -72,7 +70,6 @@ export function AuthProvider({children}) {
     await reqUser({variables: {email: email, password: password}}).then(res => {
       setUser({
         id: res.data.authentication.id,
-        cellphone: res.data.authentication.cellphone,
         email: res.data.authentication.email,
         avatar: res.data.authentication.avatar,
         username: res.data.authentication.username,

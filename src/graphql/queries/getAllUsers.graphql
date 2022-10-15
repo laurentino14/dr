@@ -4,10 +4,10 @@ query getAllUsers {
     firstname
     lastname
     email
+    avatar
     password
-    cellphone
     token_user
-    Enrollment {
+    enrollment {
       id
     }
   }

@@ -6,7 +6,6 @@ query GetUserAuthenticated($token: String){
     avatar
     username
     email
-    cellphone
     token_user
   }
 }
