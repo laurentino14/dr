@@ -1,7 +1,9 @@
+import {signOut as signOutSession, useSession} from "next-auth/react";
 import {useRouter} from "next/dist/client/router";
 import {destroyCookie, parseCookies, setCookie} from "nookies";
 import {createContext, useEffect, useState} from "react";
 import {
+  AuthDocument,
   GetUserAuthenticatedDocument,
   useAuthMutation,
 } from "../graphql/graphql";
@@ -34,6 +36,38 @@ export function AuthProvider({children}) {
   const [user, setUser] = useState<User | null>(null);
   const [reqUser, _] = useAuthMutation();
   const {reload, push} = useRouter();
+  const {data} = useSession();
+
+  useEffect(() => {
+    if (data) {
+      try {
+        client
+          .mutate({
+            mutation: AuthDocument,
+            variables: {email: data.user.email, password: ""},
+          })
+          .then(res => {
+            setUser({
+              id: res.data.authentication.id,
+              firstname: res.data.authentication.firstname,
+              lastname: res.data.authentication.lastname,
+              email: res.data.authentication.email,
+              username: res.data.authentication.username,
+              avatar: res.data.authentication.avatar,
+              token_user: res.data.authentication.token_user,
+            }),
+              setCookie(undefined, "auth", res.data.authentication.token_user, {
+                maxAge: 60 * 60 * 24 * 2,
+              });
+            signOutSession();
+            reload();
+          });
+      } catch {
+        setUser(null);
+        destroyCookie(undefined, "auth");
+      }
+    }
+  }, [data]);
 
   useEffect(() => {
     const {auth: token} = parseCookies();

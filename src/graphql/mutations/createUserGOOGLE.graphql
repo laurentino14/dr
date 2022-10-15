@@ -1,0 +1,23 @@
+mutation createUserGOOGLE($firstname:String,$lastname:String,$username:String,$avatar:String,$email:String){
+  createUserGOOGLE(input:{firstname:$firstname,lastname:$lastname,username:$username,avatar:$avatar,email:$email}){
+    id
+    lastname
+    role
+    firstname
+    lastname
+    role
+    email
+    avatar
+    github
+    platform
+    bio
+    location
+    twitter
+    site
+    username
+    token_user
+    enrollment{
+      id
+    }
+  }
+}

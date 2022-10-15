@@ -1,0 +1,23 @@
+mutation createUserGITHUB($firstname:String,$lastname:String,$username:String,$avatar:String,$email:String,$github:String,$bio:String,$location:String,$twitter:String,$site:String){
+  createUserGITHUB(input:{firstname:$firstname,lastname:$lastname,username:$username,avatar:$avatar,email:$email,github:$github,bio:$bio,location:$location,twitter:$twitter,site:$site}){
+    id
+    lastname
+    role
+    firstname
+    lastname
+    role
+    email
+    avatar
+    github
+    platform
+    bio
+    location
+    twitter
+    site
+    username
+    token_user
+    enrollment{
+      id
+    }
+  }
+}

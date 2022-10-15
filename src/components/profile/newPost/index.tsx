@@ -22,7 +22,12 @@ export const NewPost = () => {
       />
       <div className='flex justify-end'>
         {btn ? (
-          <ButtonDefault data={postData} func={newPost} value='Postar' />
+          <ButtonDefault
+            data={postData}
+            func={newPost}
+            value='Postar'
+            className='bg-primary px-4 py-2 hover:bg-yellow-500'
+          />
         ) : (
           <></>
         )}

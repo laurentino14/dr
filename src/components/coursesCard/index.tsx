@@ -24,10 +24,10 @@ export const CoursesCard = ({course}) => {
           </h1>
           <h2 className='font-roboto font-bold'>Descricao:</h2>
           <div>
-            <p className='w-72 h-32 max-h-32 overflow-clip mx-auto mb-10 relative text-justify'>
+            <div className='w-72 h-32 max-h-32 overflow-clip mx-auto mb-10 relative text-justify'>
               <div className='absolute bg-gradient-to-t from-white to-transparent w-full h-full'></div>
               {course.description}
-            </p>
+            </div>
           </div>
         </div>
       </div>

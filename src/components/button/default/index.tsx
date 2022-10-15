@@ -1,10 +1,10 @@
-export const ButtonDefault = ({value, data, func}) => {
+export const ButtonDefault = ({value, func, data, className}) => {
   return (
     <button
       onClick={e => {
         func(data);
       }}
-      className='uppercase w-28 flex items-center justify-center font-raj drop-shadow-lg hover:bg-yellow-400 font-bold h-auto pb-2 px-4 bg-primary rounded-md  pt-3 transition-all'>
+      className={` ${className}  flex items-center justify-center  hover:drop-shadow-2xl   h-auto   rounded-md   transition-all`}>
       {value}
     </button>
   );

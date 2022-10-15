@@ -22,7 +22,9 @@ export default function Profile({user}: UserT) {
       <HeaderLogged user={user} signOut={signOut} />
       <main className='       '>
         <div
-          className={`h-[370px]  bg-[url('/space-1665272099546-1738.jpg')]  bg-cover`}
+          className={`h-[370px]  bg-neutral-200  bg-cover`}
+
+          // [url('/space-1665272099546-1738.jpg')]
         />
         <section className='flex justify-between px-40 pb-40  bg-gradient-to-t from-dark to-black w-full  '>
           <ProfileHeader user={user} />

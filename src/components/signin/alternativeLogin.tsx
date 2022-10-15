@@ -1,7 +1,7 @@
 import {signIn, useSession} from "next-auth/react";
 import {useEffect} from "react";
 import {BsGithub, BsGoogle} from "react-icons/bs";
-import {AnchorDefault} from "../anchor/default";
+import {ButtonDefault} from "../button/default";
 
 export const AlternativeLogin = () => {
   const {data, status} = useSession();
@@ -14,9 +14,9 @@ export const AlternativeLogin = () => {
   return (
     <>
       <div className='flex items-center justify-evenly  w-full '>
-        <button onClick={() => signIn()}>SIGNIN</button>
-        <AnchorDefault
-          href='/api/auth/login'
+        <ButtonDefault
+          data='github'
+          func={signIn}
           className='flex hover:text-neutral-700 items-center justify-end gap-2'
           value={
             <>
@@ -25,8 +25,9 @@ export const AlternativeLogin = () => {
             </>
           }
         />
-        <AnchorDefault
-          href=''
+        <ButtonDefault
+          data='google'
+          func={signIn}
           className='flex hover:text-neutral-700 items-center justify-end gap-2'
           value={
             <>

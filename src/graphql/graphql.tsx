@@ -73,6 +73,8 @@ export type Mutation = {
   createLesson: Lesson;
   createStep: Step;
   createUser: User;
+  createUserGITHUB: User;
+  createUserGOOGLE: User;
 };
 
 
@@ -103,6 +105,16 @@ export type MutationCreateStepArgs = {
 
 export type MutationCreateUserArgs = {
   input?: InputMaybe<NewUser>;
+};
+
+
+export type MutationCreateUserGithubArgs = {
+  input?: InputMaybe<NewUserGithub>;
+};
+
+
+export type MutationCreateUserGoogleArgs = {
+  input?: InputMaybe<NewUserGoogle>;
 };
 
 export type NewCourse = {
@@ -144,6 +156,33 @@ export type NewUser = {
   username?: InputMaybe<Scalars['String']>;
 };
 
+export type NewUserGithub = {
+  avatar?: InputMaybe<Scalars['String']>;
+  bio?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  firstname?: InputMaybe<Scalars['String']>;
+  github?: InputMaybe<Scalars['String']>;
+  lastname?: InputMaybe<Scalars['String']>;
+  location?: InputMaybe<Scalars['String']>;
+  site?: InputMaybe<Scalars['String']>;
+  twitter?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+};
+
+export type NewUserGoogle = {
+  avatar?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  firstname?: InputMaybe<Scalars['String']>;
+  lastname?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+};
+
+export enum Platform {
+  Dr = 'DR',
+  Github = 'GITHUB',
+  Google = 'GOOGLE'
+}
+
 export type Query = {
   __typename?: 'Query';
   courses: Array<Course>;
@@ -178,15 +217,21 @@ export type Step = {
 
 export type User = {
   __typename?: 'User';
-  avatar?: Maybe<Scalars['String']>;
+  avatar: Scalars['String'];
+  bio: Scalars['String'];
   email: Scalars['String'];
   enrollment: Array<Enrollment>;
   firstname: Scalars['String'];
+  github: Scalars['String'];
   id: Scalars['String'];
   lastname: Scalars['String'];
+  location: Scalars['String'];
   password: Scalars['String'];
+  platform: Platform;
   role: Role;
+  site: Scalars['String'];
   token_user: Scalars['String'];
+  twitter: Scalars['String'];
   username: Scalars['String'];
 };
 
@@ -208,7 +253,34 @@ export type AuthMutationVariables = Exact<{
 }>;
 
 
-export type AuthMutation = { __typename?: 'Mutation', authentication: { __typename?: 'User', id: string, firstname: string, lastname: string, avatar?: string | null, username: string, email: string, token_user: string } };
+export type AuthMutation = { __typename?: 'Mutation', authentication: { __typename?: 'User', id: string, firstname: string, lastname: string, avatar: string, username: string, email: string, token_user: string } };
+
+export type CreateUserGithubMutationVariables = Exact<{
+  firstname?: InputMaybe<Scalars['String']>;
+  lastname?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+  avatar?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  github?: InputMaybe<Scalars['String']>;
+  bio?: InputMaybe<Scalars['String']>;
+  location?: InputMaybe<Scalars['String']>;
+  twitter?: InputMaybe<Scalars['String']>;
+  site?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CreateUserGithubMutation = { __typename?: 'Mutation', createUserGITHUB: { __typename?: 'User', id: string, lastname: string, role: Role, firstname: string, email: string, avatar: string, github: string, platform: Platform, bio: string, location: string, twitter: string, site: string, username: string, token_user: string, enrollment: Array<{ __typename?: 'Enrollment', id: string }> } };
+
+export type CreateUserGoogleMutationVariables = Exact<{
+  firstname?: InputMaybe<Scalars['String']>;
+  lastname?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+  avatar?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CreateUserGoogleMutation = { __typename?: 'Mutation', createUserGOOGLE: { __typename?: 'User', id: string, lastname: string, role: Role, firstname: string, email: string, avatar: string, github: string, platform: Platform, bio: string, location: string, twitter: string, site: string, username: string, token_user: string, enrollment: Array<{ __typename?: 'Enrollment', id: string }> } };
 
 export type CreateUserMutationVariables = Exact<{
   firstname?: InputMaybe<Scalars['String']>;
@@ -230,7 +302,7 @@ export type GetAllCoursesQuery = { __typename?: 'Query', courses: Array<{ __type
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, firstname: string, lastname: string, email: string, avatar?: string | null, password: string, token_user: string, enrollment: Array<{ __typename?: 'Enrollment', id: string }> }> };
+export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, firstname: string, lastname: string, email: string, avatar: string, password: string, token_user: string, enrollment: Array<{ __typename?: 'Enrollment', id: string }> }> };
 
 export type GetUserAuthenticatedQueryVariables = Exact<{
   token?: InputMaybe<Scalars['String']>;
@@ -281,6 +353,125 @@ export function useAuthMutation(baseOptions?: Apollo.MutationHookOptions<AuthMut
 export type AuthMutationHookResult = ReturnType<typeof useAuthMutation>;
 export type AuthMutationResult = Apollo.MutationResult<AuthMutation>;
 export type AuthMutationOptions = Apollo.BaseMutationOptions<AuthMutation, AuthMutationVariables>;
+export const CreateUserGithubDocument = gql`
+    mutation createUserGITHUB($firstname: String, $lastname: String, $username: String, $avatar: String, $email: String, $github: String, $bio: String, $location: String, $twitter: String, $site: String) {
+  createUserGITHUB(
+    input: {firstname: $firstname, lastname: $lastname, username: $username, avatar: $avatar, email: $email, github: $github, bio: $bio, location: $location, twitter: $twitter, site: $site}
+  ) {
+    id
+    lastname
+    role
+    firstname
+    lastname
+    role
+    email
+    avatar
+    github
+    platform
+    bio
+    location
+    twitter
+    site
+    username
+    token_user
+    enrollment {
+      id
+    }
+  }
+}
+    `;
+export type CreateUserGithubMutationFn = Apollo.MutationFunction<CreateUserGithubMutation, CreateUserGithubMutationVariables>;
+
+/**
+ * __useCreateUserGithubMutation__
+ *
+ * To run a mutation, you first call `useCreateUserGithubMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserGithubMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserGithubMutation, { data, loading, error }] = useCreateUserGithubMutation({
+ *   variables: {
+ *      firstname: // value for 'firstname'
+ *      lastname: // value for 'lastname'
+ *      username: // value for 'username'
+ *      avatar: // value for 'avatar'
+ *      email: // value for 'email'
+ *      github: // value for 'github'
+ *      bio: // value for 'bio'
+ *      location: // value for 'location'
+ *      twitter: // value for 'twitter'
+ *      site: // value for 'site'
+ *   },
+ * });
+ */
+export function useCreateUserGithubMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserGithubMutation, CreateUserGithubMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUserGithubMutation, CreateUserGithubMutationVariables>(CreateUserGithubDocument, options);
+      }
+export type CreateUserGithubMutationHookResult = ReturnType<typeof useCreateUserGithubMutation>;
+export type CreateUserGithubMutationResult = Apollo.MutationResult<CreateUserGithubMutation>;
+export type CreateUserGithubMutationOptions = Apollo.BaseMutationOptions<CreateUserGithubMutation, CreateUserGithubMutationVariables>;
+export const CreateUserGoogleDocument = gql`
+    mutation createUserGOOGLE($firstname: String, $lastname: String, $username: String, $avatar: String, $email: String) {
+  createUserGOOGLE(
+    input: {firstname: $firstname, lastname: $lastname, username: $username, avatar: $avatar, email: $email}
+  ) {
+    id
+    lastname
+    role
+    firstname
+    lastname
+    role
+    email
+    avatar
+    github
+    platform
+    bio
+    location
+    twitter
+    site
+    username
+    token_user
+    enrollment {
+      id
+    }
+  }
+}
+    `;
+export type CreateUserGoogleMutationFn = Apollo.MutationFunction<CreateUserGoogleMutation, CreateUserGoogleMutationVariables>;
+
+/**
+ * __useCreateUserGoogleMutation__
+ *
+ * To run a mutation, you first call `useCreateUserGoogleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserGoogleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserGoogleMutation, { data, loading, error }] = useCreateUserGoogleMutation({
+ *   variables: {
+ *      firstname: // value for 'firstname'
+ *      lastname: // value for 'lastname'
+ *      username: // value for 'username'
+ *      avatar: // value for 'avatar'
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useCreateUserGoogleMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserGoogleMutation, CreateUserGoogleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUserGoogleMutation, CreateUserGoogleMutationVariables>(CreateUserGoogleDocument, options);
+      }
+export type CreateUserGoogleMutationHookResult = ReturnType<typeof useCreateUserGoogleMutation>;
+export type CreateUserGoogleMutationResult = Apollo.MutationResult<CreateUserGoogleMutation>;
+export type CreateUserGoogleMutationOptions = Apollo.BaseMutationOptions<CreateUserGoogleMutation, CreateUserGoogleMutationVariables>;
 export const CreateUserDocument = gql`
     mutation createUser($firstname: String, $lastname: String, $email: String, $password: String, $file: Upload, $username: String) {
   createUser(

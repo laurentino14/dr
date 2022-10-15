@@ -4,19 +4,6 @@ import {CoursesCard} from "../../components/coursesCard";
 import {HeaderNotLogged} from "../../components/header/HeaderNotLogged";
 import {GetAllCoursesDocument} from "../../graphql/graphql";
 import {client} from "../../http/apollo";
-type Course = {
-  id: string;
-  title: string;
-  image: string;
-  slug: string;
-  description: string;
-  created_at: string;
-  updated_at: string;
-};
-
-type Courses = {
-  courses: [Course];
-};
 export default function Cursos({data}) {
   return (
     <>
@@ -29,7 +16,7 @@ export default function Cursos({data}) {
           Todos os cursos disponíveis
         </h1>
         <section className='w-full min-h-screen  flex px-10  py-40 items-center justify-center gap-12 gap-y-16 flex-wrap'>
-          {data?.courses.map(course => {
+          {data.courses.map(course => {
             return <CoursesCard course={course} />;
           })}
         </section>
@@ -42,7 +29,7 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       data: await client
-        .query<Courses>({query: GetAllCoursesDocument})
+        .query({query: GetAllCoursesDocument})
         .then(res => res.data),
     },
     revalidate: 60 * 60,
