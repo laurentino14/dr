@@ -42,12 +42,14 @@ export const ProfileHeader = ({user}: UserForComponents) => {
           {user.bio ? (
             <span className='text-neutral-400 w-full flex gap-2 text-xs items-center'>
               <BsTextIndentLeft className='text-xl' />
-              <p>{user.bio}</p>
+              <p contentEditable spellCheck={false}>
+                {user.bio}
+              </p>
             </span>
           ) : (
             <span className='text-neutral-400 w-full flex gap-2 text-xs items-center'>
               <BsTextIndentLeft className='text-xl' />
-              <p contentEditable>{user.bio}</p>
+              <p contentEditable>Adicionar biografia</p>
             </span>
           )}
           {user.location ? (
@@ -88,7 +90,8 @@ export const ProfileHeader = ({user}: UserForComponents) => {
                   href={user.github}
                   target='_blank'
                   className='flex items-center gap-[0.6rem] hover:text-neutral-100 transition-colors duration-300'>
-                  <BsGithub /> <span className='text-xs'>Github</span>
+                  <BsGithub />{" "}
+                  <span className='text-xs'>{user.github.split("/")[3]}</span>
                 </a>
               ) : (
                 <a
@@ -101,15 +104,15 @@ export const ProfileHeader = ({user}: UserForComponents) => {
                 <a
                   href={`http://twitter.com/${user.twitter}`}
                   target='_blank'
-                  className='flex items-center gap-2 hover:text-neutral-100 transition-colors duration-300'>
+                  className='flex items-center gap-[0.6rem] hover:text-neutral-100 transition-colors duration-300'>
                   <IoLogoTwitter />
-                  <p className='text-xs'>Twitter</p>
+                  <p className='text-xs'>{user.twitter}</p>
                 </a>
               ) : (
                 <a
                   target='_blank'
                   onBlur={() => updateTwitter("123")}
-                  className='flex items-center gap-2 hover:text-neutral-100 transition-colors duration-300'>
+                  className='flex items-center gap-[0.6rem] hover:text-neutral-100 transition-colors duration-300'>
                   <IoLogoTwitter />
                   <p contentEditable className='text-xs'>
                     Adicionar Twitter

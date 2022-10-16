@@ -22,13 +22,14 @@ export default NextAuth({
   ],
   callbacks: {
     async session({session, token, user}) {
-      console.log(session);
+      console.log(user);
       return session;
     },
     async jwt({token, user, account, profile, isNewUser}) {
       return token;
     },
     async signIn({profile, user, account, email}) {
+      console.log(profile);
       if (account.provider === "google") {
         const name = profile.name.split(" ");
         const firstname = name[0];

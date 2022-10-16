@@ -5,7 +5,7 @@ import {FaSignOutAlt} from "react-icons/fa";
 export const HeaderLogged = ({signOut, user}) => {
   return (
     <>
-      <header className='w-full h-20 bg-neutral-100 flex justify-center gap-52 px-40 items-center'>
+      <header className='w-full h-20 bg-neutral-100  justify-center gap-0 hidden lg:flex lg:gap-16 xl:gap-20 2xl:gap-52 px-40 items-center'>
         <Link href='/app' passHref>
           <a>
             <Image
@@ -13,12 +13,12 @@ export const HeaderLogged = ({signOut, user}) => {
               width={100}
               height={100}
               alt='Logomarca da Dev Running'
-              className='hover:brightness-200'
+              className='hover:brightness-200 '
             />
           </a>
         </Link>
 
-        <div className='flex items-center justify-center gap-14 font-medium'>
+        <div className='flex items-center justify-center gap-14 font-medium text-sm lg:text-base'>
           <Link href='/app/profile' passHref>
             <a
               href=''
@@ -42,11 +42,11 @@ export const HeaderLogged = ({signOut, user}) => {
         </div>
         <div className='flex gap-12'>
           <Link href='/app/mycourses' passHref>
-            <a className='uppercase font-raj drop-shadow-lg hover:bg-yellow-400 font-bold h-auto pb-2 px-4 bg-primary rounded-md flex items-center pt-3 transition-all'>
+            <a className='uppercase xl:flex justify-center font-raj drop-shadow-lg hover:bg-yellow-400 font-bold h-auto pb-2 px-4 bg-primary rounded-md hidden items-center pt-3 transition-all'>
               MEUS CURSOS
             </a>
           </Link>
-          <div className='h-auto flex items-center rounded-full justify-center'>
+          <div className='h-auto  xl:flex hidden  items-center rounded-full justify-center'>
             <Image
               className='rounded-full drop-shadow-md aspect-square'
               src={user?.avatar ? user?.avatar : "/pp.jpg"}
