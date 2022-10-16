@@ -237,13 +237,21 @@ export type User = {
 
 export type UserAuthenticated = {
   __typename?: 'UserAuthenticated';
-  avatar?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  firstname?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['String']>;
-  lastname?: Maybe<Scalars['String']>;
-  token_user?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
+  avatar: Scalars['String'];
+  bio: Scalars['String'];
+  email: Scalars['String'];
+  enrollment: Array<Enrollment>;
+  firstname: Scalars['String'];
+  github: Scalars['String'];
+  id: Scalars['String'];
+  lastname: Scalars['String'];
+  location: Scalars['String'];
+  platform: Platform;
+  role: Role;
+  site: Scalars['String'];
+  token_user: Scalars['String'];
+  twitter: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type AuthMutationVariables = Exact<{
@@ -253,7 +261,7 @@ export type AuthMutationVariables = Exact<{
 }>;
 
 
-export type AuthMutation = { __typename?: 'Mutation', authentication: { __typename?: 'User', id: string, firstname: string, lastname: string, avatar: string, username: string, email: string, token_user: string } };
+export type AuthMutation = { __typename?: 'Mutation', authentication: { __typename?: 'User', id: string, lastname: string, role: Role, firstname: string, email: string, avatar: string, github: string, platform: Platform, bio: string, location: string, twitter: string, site: string, username: string, token_user: string } };
 
 export type CreateUserGithubMutationVariables = Exact<{
   firstname?: InputMaybe<Scalars['String']>;
@@ -309,18 +317,27 @@ export type GetUserAuthenticatedQueryVariables = Exact<{
 }>;
 
 
-export type GetUserAuthenticatedQuery = { __typename?: 'Query', userAuthenticated: { __typename?: 'UserAuthenticated', id?: string | null, firstname?: string | null, lastname?: string | null, avatar?: string | null, username?: string | null, email?: string | null, token_user?: string | null } };
+export type GetUserAuthenticatedQuery = { __typename?: 'Query', userAuthenticated: { __typename?: 'UserAuthenticated', id: string, lastname: string, role: Role, firstname: string, email: string, avatar: string, github: string, platform: Platform, bio: string, location: string, twitter: string, site: string, username: string, token_user: string } };
 
 
 export const AuthDocument = gql`
     mutation auth($password: String, $email: String, $token: String) {
   authentication(input: {email: $email, password: $password, token: $token}) {
     id
+    lastname
+    role
     firstname
     lastname
-    avatar
-    username
+    role
     email
+    avatar
+    github
+    platform
+    bio
+    location
+    twitter
+    site
+    username
     token_user
   }
 }
@@ -600,11 +617,20 @@ export const GetUserAuthenticatedDocument = gql`
     query GetUserAuthenticated($token: String) {
   userAuthenticated(input: {token: $token}) {
     id
+    lastname
+    role
     firstname
     lastname
-    avatar
-    username
+    role
     email
+    avatar
+    github
+    platform
+    bio
+    location
+    twitter
+    site
+    username
     token_user
   }
 }

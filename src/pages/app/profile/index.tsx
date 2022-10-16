@@ -26,13 +26,15 @@ export default function Profile({user}: UserT) {
 
           // [url('/space-1665272099546-1738.jpg')]
         />
-        <section className='flex justify-between px-40 pb-40  bg-gradient-to-t from-dark to-black w-full  '>
+        <section className='flex justify-between px-40 pb-40 bg-gradient-to-t from-dark to-black w-full  '>
           <ProfileHeader user={user} />
+
           <div className='min-h-screen'>
-            <section className='w-96 mt-60 h-72 rounded-lg bg-[#111111aa] pt-4 pb-8 px-4'>
+            <section className='w-96 mt-96 h-72 rounded-lg bg-[#111111aa] pt-4 pb-8 px-4 flex flex-col items-center justify-between gap-4'>
               <h1 className='w-full text-center font-bold font-raj text-xl animate-pulse text-neutral-100 uppercase'>
                 TECNOLOGIAS
               </h1>
+
               <div className=' w-full h-full flex gap-4 justify-evenly items-center flex-wrap'>
                 <CardsTech />
                 <CardsTech />
@@ -57,7 +59,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
   if (token) {
     const user = await client
-      .query({
+      .query<User>({
         query: GetUserAuthenticatedDocument,
         variables: {token: token},
       })

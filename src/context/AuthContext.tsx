@@ -16,13 +16,41 @@ type AuthContext = {
 };
 
 export type User = {
+  [x: string]: any;
   id: string;
-  firstname: string;
   lastname: string;
-  username: string;
+  role: string;
+  firstname: string;
   email: string;
   avatar: string;
+  github: string;
+  platform: string;
+  bio: string;
+  location: string;
+  twitter: string;
+  site: string;
+  username: string;
   token_user: string;
+};
+
+export type UserForComponents = {
+  user: {
+    [x: string]: any;
+    id: string;
+    lastname: string;
+    role: string;
+    firstname: string;
+    email: string;
+    avatar: string;
+    github: string;
+    platform: string;
+    bio: string;
+    location: string;
+    twitter: string;
+    site: string;
+    username: string;
+    token_user: string;
+  };
 };
 
 type signInData = {
@@ -51,6 +79,13 @@ export function AuthProvider({children}) {
               id: res.data.authentication.id,
               firstname: res.data.authentication.firstname,
               lastname: res.data.authentication.lastname,
+              bio: res.data.authentication.bio,
+              github: res.data.authentication.github,
+              location: res.data.authentication.location,
+              platform: res.data.authentication.platform,
+              role: res.data.authentication.role,
+              site: res.data.authentication.site,
+              twitter: res.data.authentication.twitter,
               email: res.data.authentication.email,
               username: res.data.authentication.username,
               avatar: res.data.authentication.avatar,
@@ -84,6 +119,13 @@ export function AuthProvider({children}) {
               id: data.data.userAuthenticated.id,
               firstname: data.data.userAuthenticated.firstname,
               lastname: data.data.userAuthenticated.lastname,
+              bio: data.data.userAuthenticated.bio,
+              github: data.data.userAuthenticated.github,
+              location: data.data.userAuthenticated.location,
+              platform: data.data.userAuthenticated.platform,
+              role: data.data.userAuthenticated.role,
+              site: data.data.userAuthenticated.site,
+              twitter: data.data.userAuthenticated.twitter,
               email: data.data.userAuthenticated.email,
               username: data.data.userAuthenticated.username,
               avatar: data.data.userAuthenticated.avatar,
@@ -106,6 +148,13 @@ export function AuthProvider({children}) {
         id: res.data.authentication.id,
         email: res.data.authentication.email,
         avatar: res.data.authentication.avatar,
+        bio: res.data.authentication.bio,
+        github: res.data.authentication.github,
+        location: res.data.authentication.location,
+        platform: res.data.authentication.platform,
+        role: res.data.authentication.role,
+        site: res.data.authentication.site,
+        twitter: res.data.authentication.twitter,
         username: res.data.authentication.username,
         firstname: res.data.authentication.firstname,
         lastname: res.data.authentication.lastname,

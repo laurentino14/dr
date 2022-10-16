@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Platform {
+  DR
+  GITHUB
+  GOOGLE
+}
+
+model User {
+  id             String       @id @default(uuid())
+  firstname      String
+  lastname       String
+  username       String       @unique
+  role           Role         @default(USER)
+  platform       Platform     @default(DR)
+  bio            String?
+  site           String?
+  twitter        String?
+  github         String?
+  location       String?
+  email_verified Boolean
+  avatar         String       @unique
+  email          String       @unique
+  password       String?
+  token_user     String
+  created_at     DateTime     @default(now()) @db.Date()
+  updated_at     DateTime?    @updatedAt
+  Enrollment     Enrollment[]
+
+  @@map("users")
+}
+
+model Course {
+  id          String       @id @default(cuid())
+  title       String       @unique
+  slug        String       @unique
+  description String
+  image       String
+  created_at  DateTime     @default(now()) @db.Date()
+  updated_at  DateTime?    @updatedAt
+  Lesson      Lesson[]
+  Step        Step[]
+  Enrollment  Enrollment[]
+
+  @@map("courses")
+}
+
+model Enrollment {
+  id         String    @id @default(cuid())
+  created_at DateTime  @db.Date()
+  updated_at DateTime? @updatedAt
+  deleted_at DateTime?
+  User       User      @relation(fields: [userId], references: [id])
+  Course     Course    @relation(fields: [courseId], references: [id])
+  userId     String
+  courseId   String
+
+  @@map("enrollments")
+}
+
+model Step {
+  id          String    @id @default(cuid())
+  title       String    @unique
+  description String
+  slug        String    @unique
+  created_at  DateTime  @default(now()) @db.Date()
+  updated_at  DateTime? @updatedAt
+  Lessons     Lesson[]
+  Course      Course    @relation(fields: [courseId], references: [id])
+  courseId    String
+
+  @@map("steps")
+}
+
+model Lesson {
+  id          String    @id @default(cuid())
+  title       String    @unique
+  slug        String    @unique
+  description String
+  link        String    @unique
+  created_at  DateTime  @default(now()) @db.Date()
+  updated_at  DateTime? @updatedAt
+  Step        Step      @relation(fields: [stepId], references: [id])
+  stepId      String
+  Course      Course    @relation(fields: [courseId], references: [id])
+  courseId    String
+
+  @@map("lessons")
+}

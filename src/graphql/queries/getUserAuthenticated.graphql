@@ -1,11 +1,20 @@
 query GetUserAuthenticated($token: String){
   userAuthenticated(input:{token:$token}){
     id
+    lastname
+    role
     firstname
     lastname
-    avatar
-    username
+    role
     email
+    avatar
+    github
+    platform
+    bio
+    location
+    twitter
+    site
+    username
     token_user
   }
 }
