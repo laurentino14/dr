@@ -25,3 +25,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         opacity: 0;
         -webkit-appearance: none;
 }
+
+
+#cd {
+        direction: rtl;
+        scroll-behavior: smooth;
+}
+
+#cd div {
+        direction: ltr;
+}
+
+#cd::-webkit-scrollbar {
+        width: 0.2rem;
+        @apply bg-transparent absolute;
+}
+
+#cd::-webkit-scrollbar-thumb {
+        @apply bg-neutral-200;
+}

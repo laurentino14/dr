@@ -15,6 +15,7 @@
     "apollo-upload-client": "^17.0.0",
     "axios": "^1.1.2",
     "blob-util": "^2.0.2",
+    "cookiejs": "^2.1.2",
     "graphql": "^16.6.0",
     "js-cookie": "^3.0.1",
     "jscookie": "^1.1.0",
@@ -25,6 +26,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
+    "react-toastify": "^9.0.8",
     "urql": "^3.0.3"
   },
   "devDependencies": {
@@ -44,6 +46,8 @@
     "eslint": "8.23.0",
     "eslint-config-next": "12.3.0",
     "postcss": "^8.4.16",
+    "prettier": "^2.7.1",
+    "prettier-plugin-tailwindcss": "^0.1.13",
     "prisma": "^4.4.0",
     "tailwindcss": "^3.1.8",
     "typescript": "^4.8.3"

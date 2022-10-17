@@ -1,6 +1,7 @@
+import cookie from "cookiejs";
 import {signOut as signOutSession, useSession} from "next-auth/react";
 import {useRouter} from "next/dist/client/router";
-import {destroyCookie, parseCookies, setCookie} from "nookies";
+import {setCookie} from "nookies";
 import {createContext, useEffect, useState} from "react";
 import {
   AuthDocument,
@@ -95,17 +96,17 @@ export function AuthProvider({children}) {
                 maxAge: 60 * 60 * 24 * 2,
               });
             signOutSession();
-            reload();
+            push("/app");
           });
       } catch {
         setUser(null);
-        destroyCookie(undefined, "auth");
+        cookie.remove("auth");
       }
     }
   }, [data]);
 
   useEffect(() => {
-    const {auth: token} = parseCookies();
+    const token = cookie.get("auth");
 
     if (token) {
       try {
@@ -134,11 +135,11 @@ export function AuthProvider({children}) {
           );
       } catch (err) {
         setUser(null);
-        destroyCookie(undefined, "auth");
+        cookie.remove("auth");
       }
     } else {
       setUser(null);
-      destroyCookie(undefined, "auth");
+      cookie.remove("auth");
     }
   }, []);
 
@@ -160,9 +161,9 @@ export function AuthProvider({children}) {
         lastname: res.data.authentication.lastname,
         token_user: res.data.authentication.token_user,
       });
-      destroyCookie(undefined, "auth");
-      setCookie(undefined, "auth", res.data.authentication.token_user, {
-        maxAge: 60 * 60 * 24 * 2,
+
+      cookie.set("auth", res.data.authentication.token_user, {
+        expires: 60 * 60 * 24 * 2,
       });
 
       reload();
@@ -171,11 +172,11 @@ export function AuthProvider({children}) {
 
   function signOut() {
     setUser(null);
-    destroyCookie(undefined, "auth");
+    cookie.remove("auth");
 
     setTimeout(() => {
       reload();
-    }, 300);
+    }, 500);
   }
 
   return (
