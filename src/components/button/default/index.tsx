@@ -4,7 +4,7 @@ export const ButtonDefault = ({value, func, data, className}) => {
       onClick={e => {
         func(data);
       }}
-      className={` ${className}  flex items-center justify-center  hover:drop-shadow-2xl   h-auto   rounded-md   transition-all`}>
+      className={` ${className}  flex h-auto items-center     justify-center   rounded-md   transition-all`}>
       {value}
     </button>
   );
