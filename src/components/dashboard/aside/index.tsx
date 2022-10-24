@@ -1,5 +1,5 @@
 import {useRouter} from "next/router";
-import {useContext, useState} from "react";
+import {useContext} from "react";
 import {BiSupport} from "react-icons/bi";
 import {BsFillGearFill, BsFillPersonFill} from "react-icons/bs";
 import {FaSignOutAlt} from "react-icons/fa";
@@ -12,8 +12,7 @@ import {
 } from "react-icons/md";
 import {AuthContext} from "../../../context/AuthContext";
 
-export const AsideDashboard = () => {
-  const [nav, setNav] = useState("feed");
+export const AsideDashboard = ({nav, setNav}) => {
   const {signOut} = useContext(AuthContext);
   const {push} = useRouter();
   return (
@@ -32,7 +31,10 @@ export const AsideDashboard = () => {
             </p>
           </button>
           <button
-            onClick={() => setNav("feed")}
+            onClick={() => {
+              setNav("feed");
+              scrollTo({top: 0, behavior: "smooth"});
+            }}
             className={`${
               nav === "feed" ? "bg-[#111111ff]" : ""
             } group flex h-14 w-full items-center justify-start gap-2 px-16 uppercase transition-colors duration-200 hover:cursor-pointer hover:bg-[#111111aa] `}>
@@ -43,7 +45,10 @@ export const AsideDashboard = () => {
           </button>
 
           <button
-            onClick={() => setNav("mycourses")}
+            onClick={() => {
+              setNav("mycourses");
+              scrollTo({top: 0, behavior: "smooth", left: 0});
+            }}
             className={`${
               nav === "mycourses" ? "bg-[#111111ff]" : ""
             } group flex h-14 w-full items-center justify-start gap-2 px-16 uppercase transition-colors duration-200 hover:cursor-pointer hover:bg-[#111111aa]`}>
@@ -61,7 +66,10 @@ export const AsideDashboard = () => {
             </p>
           </button>
           <button
-            onClick={() => setNav("community")}
+            onClick={() => {
+              setNav("community");
+              scrollTo({top: 0, behavior: "smooth"});
+            }}
             className={` ${
               nav === "community" ? "bg-[#111111ff]" : ""
             }  group flex h-14 w-full items-center justify-start gap-2 px-16 uppercase transition-colors duration-200 hover:cursor-pointer hover:bg-[#111111aa] `}>
@@ -73,7 +81,10 @@ export const AsideDashboard = () => {
         </div>
         <div className='text-sm font-medium'>
           <button
-            onClick={() => setNav("settings")}
+            onClick={() => {
+              setNav("settings");
+              scrollTo({top: 0, behavior: "smooth"});
+            }}
             className={` ${
               nav === "settings" ? "bg-[#111111ff]" : ""
             } group flex h-14 w-full items-center justify-start gap-2 px-16 uppercase text-neutral-300 transition-colors duration-200 hover:cursor-pointer hover:bg-[#111111aa] hover:text-neutral-100`}>
@@ -81,7 +92,10 @@ export const AsideDashboard = () => {
             Configurações
           </button>
           <button
-            onClick={() => setNav("support")}
+            onClick={() => {
+              setNav("support");
+              scrollTo({top: 0, behavior: "smooth"});
+            }}
             className={` ${
               nav === "support" ? "bg-[#111111ff]" : ""
             } group flex h-14 w-full items-center justify-start gap-2 px-16 uppercase text-neutral-300 transition-colors duration-200 hover:cursor-pointer hover:bg-[#111111aa] `}>

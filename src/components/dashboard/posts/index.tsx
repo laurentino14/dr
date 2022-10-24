@@ -18,10 +18,18 @@ type Props = {
 };
 
 export const PostsDashboard = ({user, post}: Props) => {
-  const [like, setLike] = useState<Boolean | String>(false);
-  const [comment, setComment] = useState<Boolean | String>(false);
-  const [share, setShare] = useState<Boolean | String>(false);
+  const [like, setLike] = useState<Boolean | string>(false);
+  const [comment, setComment] = useState<Boolean | string>(false);
+  const [share, setShare] = useState<Boolean | string>(false);
+  const [btnComment, setBtnComment] = useState<Boolean>(false);
+  const [commentOnPostData, setCommentOnPostData] = useState<string>("");
   const [read, setRead] = useState<Boolean>(false);
+
+  function commentOnPost(data: string) {
+    setCommentOnPostData("");
+    alert(data);
+  }
+
   return (
     <div className='flex  w-full gap-6 rounded-md border border-neutral-100  bg-neutral-100 px-10 py-20 transition-all delay-200 duration-1000'>
       <aside className='flex w-1/4 flex-col items-start justify-start'>
@@ -79,7 +87,7 @@ export const PostsDashboard = ({user, post}: Props) => {
         </div>
         <div
           className={` ${
-            read ? "h-full max-h-full" : " h-96 max-h-96"
+            read ? "h-full max-h-full overflow-y-auto" : " h-96 max-h-96"
           } relative mt-8  flex  flex-col gap-4 overflow-hidden transition-all delay-100 duration-1000`}>
           <p className='text-justify'>
             Contrary to popular belief, Lorem Ipsum is not simply random text.
@@ -170,7 +178,13 @@ export const PostsDashboard = ({user, post}: Props) => {
             </p>
           </button>
           <button
-            onClick={() => (!comment ? setComment(true) : setComment(false))}
+            onClick={() => {
+              if (!btnComment) {
+                setBtnComment(true);
+              } else {
+                setBtnComment(false);
+              }
+            }}
             className='group flex w-32 items-center justify-center gap-2 rounded-sm font-medium transition-colors duration-300 hover:text-neutral-700 '>
             <BsChatTextFill
               className={` ${
@@ -200,6 +214,41 @@ export const PostsDashboard = ({user, post}: Props) => {
             </p>
           </button>
         </div>
+        <section
+          className={`${
+            btnComment ? "h-96" : "h-0"
+          } mt-4  transition-all delay-200 duration-300`}>
+          <div
+            className={`${
+              btnComment ? "opacity-100" : "opacity-0"
+            }  flex flex-col gap-4  px-10 pt-10 delay-200 duration-300 `}>
+            <h1 className='text-xs font-bold'>Escreva um comentário:</h1>
+            <textarea
+              className='h-20 w-full rounded-lg border-2 border-transparent bg-neutral-300 py-4 px-4 text-sm text-dark outline-none transition-all delay-200 duration-500 focus:h-72 focus:border-2 focus:border-neutral-600 focus:outline-none'
+              value={commentOnPostData}
+              onChange={e => {
+                setCommentOnPostData(e.target.value);
+              }}
+              id=''
+            />
+            <div className='flex justify-end'>
+              <button
+                disabled={commentOnPostData != "" ? false : true}
+                className={` ${
+                  commentOnPostData != ""
+                    ? "bg-dark text-neutral-300 hover:bg-neutral-800 hover:text-neutral-100"
+                    : "bg-neutral-300 text-neutral-400"
+                }   mt-4 rounded-sm py-2 px-5 text-xs font-bold uppercase`}
+                onClick={e => {
+                  commentOnPost(commentOnPostData);
+                  setComment(true);
+                  setBtnComment(false);
+                }}>
+                ENVIAR
+              </button>
+            </div>
+          </div>
+        </section>
       </section>
     </div>
   );

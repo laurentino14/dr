@@ -27,10 +27,10 @@ export default function Profile({user}: UserT) {
       <HeaderLoggedMobile user={user} signOut={signOut} />
       <main className='       '>
         <div
-          className={`relative flex h-[370px] items-center justify-center  bg-neutral-200  bg-cover`}
+          className={` relative flex h-[370px] items-center justify-center   bg-cover`}
           // bg-[url('/space-1665272099546-1738.jpg')]
         >
-          <h1 className='absolute right-60 top-[4.32rem] font-raj font-semibold'>
+          <h1 className='absolute right-60 top-[4.32rem]  font-raj font-semibold'>
             Adicione uma capa
           </h1>
           <AddCard className='absolute right-40 top-10 scale-50 bg-dark text-white hover:brightness-200' />

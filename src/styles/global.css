@@ -3,6 +3,7 @@
 
 body {
         @apply bg-neutral-100 font-roboto text-dark;
+        scroll-behavior: smooth;
 }
 
 html {
@@ -12,12 +13,14 @@ html {
 *::-webkit-scrollbar {
         @apply bg-dark;
         width: 0.4rem;
+        scroll-behavior: smooth;
 }
 
 *::-webkit-scrollbar-thumb {
         background-color: #ffb703;
         border-radius: 50px;
         width: 0.4rem;
+        scroll-behavior: smooth;
 }
 
 input[type="date"]::-webkit-inner-spin-button,
@@ -43,4 +46,28 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 #cd::-webkit-scrollbar-thumb {
         @apply bg-neutral-200;
+}
+
+#mcSlide::-webkit-scrollbar {
+        @apply bg-transparent;
+}
+
+#mcSlide::-webkit-scrollbar-thumb {
+        @apply bg-transparent;
+}
+
+#ccardsdiv::-webkit-scrollbar {
+        @apply bg-transparent;
+}
+
+#ccardsdiv::-webkit-scrollbar-thumb {
+        @apply bg-dark;
+}
+
+#chatroom::-webkit-scrollbar {
+        @apply bg-transparent;
+}
+
+#chatroom::-webkit-scrollbar-thumb {
+        @apply bg-dark;
 }

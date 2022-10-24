@@ -1,0 +1,9 @@
+query getUserByID($id: String!){
+  getUserByID(id:$id){
+    id
+    firstname
+    lastname
+    avatar
+    bio
+  }
+}

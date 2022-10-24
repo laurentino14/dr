@@ -4,6 +4,7 @@ import {SessionProvider} from "next-auth/react";
 import type {AppProps} from "next/app";
 import {Footer} from "../components/footer";
 import {AuthProvider} from "../context/AuthContext";
+import {SocketProvider} from "../context/SocketContext";
 import {client} from "../http/apollo";
 import "../styles/global.css";
 import "../styles/tailwind.css";
@@ -15,7 +16,9 @@ function MyApp({
     <SessionProvider>
       <ApolloProvider client={client}>
         <AuthProvider>
-          <Component {...pageProps} />
+          <SocketProvider>
+            <Component {...pageProps} />
+          </SocketProvider>
           <Footer />
         </AuthProvider>
       </ApolloProvider>

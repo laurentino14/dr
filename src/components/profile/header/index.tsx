@@ -19,8 +19,8 @@ export const ProfileHeader = ({user}: UserForComponents) => {
     return;
   }
   return (
-    <section className=' absolute flex w-96   -mt-40  justify-center items-center flex-col gap-8'>
-      <div className='rounded-full p-2 bg-gradient-to-b from-dark to-black flex items-center'>
+    <section className=' absolute -mt-40 flex   w-96  flex-col items-center justify-center gap-8'>
+      <div className='flex items-center rounded-full bg-gradient-to-b from-dark to-black p-2'>
         <Image
           className='z-30 rounded-full drop-shadow-2xl'
           src={user?.avatar}
@@ -29,74 +29,74 @@ export const ProfileHeader = ({user}: UserForComponents) => {
           height={250}
         />
       </div>
-      <div className=' flex justify-center gap-4 w-full items-center flex-col'>
-        <div className='flex items-center justify-center w-full ml-14 flex-col'>
-          <h1 className='font-medium text-2xl w-full text-neutral-100 flex gap-2  items-center'>
+      <div className=' flex w-full flex-col items-center justify-center gap-4'>
+        <div className='ml-14 flex w-full flex-col items-center justify-center'>
+          <h1 className='flex w-full items-center gap-2 text-2xl font-medium  text-neutral-100'>
             <p>{user?.firstname}</p> <p>{user.lastname}</p>
           </h1>
-          <h2 className='font-poppins w-full font-normal text-base text-primary flex items-center '>
+          <h2 className='flex w-full items-center font-poppins text-base font-normal text-primary '>
             {user?.username}
           </h2>
         </div>
-        <div className='flex justify-center w-full items-center gap-1 flex-col'>
+        <div className='flex w-full flex-col items-center justify-center gap-1'>
           {user.bio ? (
-            <span className='text-neutral-400 w-full flex gap-2 text-xs items-center'>
+            <span className='flex w-full items-center gap-2 text-xs text-neutral-400'>
               <BsTextIndentLeft className='text-xl' />
               <p contentEditable spellCheck={false}>
                 {user.bio}
               </p>
             </span>
           ) : (
-            <span className='text-neutral-400 w-full flex gap-2 text-xs items-center'>
+            <span className='flex w-full items-center gap-2 text-xs text-neutral-400'>
               <BsTextIndentLeft className='text-xl' />
               <p contentEditable>Adicionar biografia</p>
             </span>
           )}
           {user.location ? (
-            <span className='text-neutral-400 w-full  text-xs flex gap-2 items-center'>
+            <span className='flex w-full  items-center gap-2 text-xs text-neutral-400'>
               <TbWorld className='text-xl ' />
               <p>{user.location}</p>
             </span>
           ) : (
-            <span className='text-neutral-400 w-full  text-xs flex gap-2 items-center'>
+            <span className='flex w-full  items-center gap-2 text-xs text-neutral-400'>
               <TbWorld className='text-xl ' />
               <p>Adicionar localidade</p>
             </span>
           )}
           {user.site ? (
-            <span className='flex gap-[0.6rem] w-full text-neutral-400 text-xs items-center'>
+            <span className='flex w-full items-center gap-[0.6rem] text-xs text-neutral-400'>
               <BsLink className='text-lg' />{" "}
               <a
                 target='_blank'
                 href={`http://${user.site}`}
-                className='hover:text-neutral-100 transition-colors duration-300'>
+                className='transition-colors duration-300 hover:text-neutral-100'>
                 {user.site}
               </a>
             </span>
           ) : (
-            <span className='flex gap-[0.6rem] w-full text-neutral-400 text-xs items-center'>
+            <span className='flex w-full items-center gap-[0.6rem] text-xs text-neutral-400'>
               <BsLink className='text-lg' />{" "}
               <a
                 target='_blank'
-                className='hover:text-neutral-100 transition-colors duration-300'>
+                className='transition-colors duration-300 hover:text-neutral-100'>
                 Adicionar portfolio
               </a>
             </span>
           )}
-          <div className='flex flex-col gap-3 pt-4 w-full items-center'>
-            <div className='flex ml-1 flex-col  gap-2 w-full text-base text-neutral-400'>
+          <div className='flex w-full flex-col items-center gap-3 pt-4'>
+            <div className='ml-1 flex w-full  flex-col gap-2 text-base text-neutral-400'>
               {user.github ? (
                 <a
                   href={user.github}
                   target='_blank'
-                  className='flex items-center gap-[0.6rem] hover:text-neutral-100 transition-colors duration-300'>
+                  className='flex items-center gap-[0.6rem] transition-colors duration-300 hover:text-neutral-100'>
                   <BsGithub />{" "}
                   <span className='text-xs'>{user.github.split("/")[3]}</span>
                 </a>
               ) : (
                 <a
                   target='_blank'
-                  className='flex items-center gap-[0.6rem] hover:text-neutral-100 transition-colors duration-300'>
+                  className='flex items-center gap-[0.6rem] transition-colors duration-300 hover:text-neutral-100'>
                   <BsGithub /> <span className='text-xs'>Adicionar GitHub</span>
                 </a>
               )}
@@ -104,7 +104,7 @@ export const ProfileHeader = ({user}: UserForComponents) => {
                 <a
                   href={`http://twitter.com/${user.twitter}`}
                   target='_blank'
-                  className='flex items-center gap-[0.6rem] hover:text-neutral-100 transition-colors duration-300'>
+                  className='flex items-center gap-[0.6rem] transition-colors duration-300 hover:text-neutral-100'>
                   <IoLogoTwitter />
                   <p className='text-xs'>{user.twitter}</p>
                 </a>
@@ -112,7 +112,7 @@ export const ProfileHeader = ({user}: UserForComponents) => {
                 <a
                   target='_blank'
                   onBlur={() => updateTwitter("123")}
-                  className='flex items-center gap-[0.6rem] hover:text-neutral-100 transition-colors duration-300'>
+                  className='flex items-center gap-[0.6rem] transition-colors duration-300 hover:text-neutral-100'>
                   <IoLogoTwitter />
                   <p contentEditable className='text-xs'>
                     Adicionar Twitter
