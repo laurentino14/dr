@@ -3,15 +3,19 @@ import {useContext, useEffect} from "react";
 import {SocketContext} from "../../../../context/SocketContext";
 
 export const CardUsersChat = ({user}) => {
-  const {setRoom, setUserToSendMessage, userToSendMessage} =
-    useContext(SocketContext);
+  const {setUserToSendMessage, userToSendMessage} = useContext(SocketContext);
 
   useEffect(() => {
     console.log(userToSendMessage);
   }, [userToSendMessage]);
   return (
     <button
-      onClick={async () => await setUserToSendMessage(user.id)}
+      onClick={() => {
+        setUserToSendMessage(user.id);
+        setTimeout(() => {
+          console.log(userToSendMessage);
+        }, 400);
+      }}
       className='flex h-16 items-center gap-6  py-1 px-4 transition-colors duration-200 hover:cursor-pointer hover:bg-neutral-300'>
       <div className='h-12 w-12 rounded-full drop-shadow-md'>
         <Image

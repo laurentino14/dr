@@ -11,7 +11,7 @@ import {MyContactsChat} from "./myContacts";
 export const Chat = () => {
   const [open, setOpen] = useState(false);
   const [textAreaValue, setTextAreaValue] = useState("");
-  const {userToSendMessage, socket, room, messages} = useContext(SocketContext);
+  const {userToSendMessage, socket, room} = useContext(SocketContext);
   const {user} = useContext(AuthContext);
 
   return (
@@ -55,10 +55,12 @@ export const Chat = () => {
             onKeyDown={e => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                socket.emit("message", {
+                socket.emit("private message", {
                   message: textAreaValue,
-                  room,
+                  to: userToSendMessage.id,
                   from: user.id,
+                  room: room,
+                  room1: userToSendMessage.id + user.id,
                 });
                 setTextAreaValue("");
               }

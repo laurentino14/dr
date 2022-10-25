@@ -8,8 +8,7 @@ type ChatProps = {
 };
 
 export const ChatRoom = ({userTo}) => {
-  const {messages} = useContext(SocketContext);
-
+  const {closeRoom} = useContext(SocketContext);
   return (
     <div className='h-full w-full bg-neutral-100'>
       <div className=' relative flex h-14 w-auto items-center gap-4 bg-neutral-100 py-10 pl-8 drop-shadow-sm'>
@@ -32,14 +31,15 @@ export const ChatRoom = ({userTo}) => {
         </div>
         <div className='absolute right-8 flex h-14 w-20 items-center justify-center'>
           <button
-          //   onClick={}
-          >
+            onClick={() => {
+              closeRoom();
+            }}>
             <IoMdClose className='text-3xl hover:text-neutral-600' />
           </button>
         </div>
       </div>
       <div
-        className=' flex h-[22.2rem] w-full flex-col gap-y-3 overflow-y-scroll bg-neutral-100 py-10 text-dark'
+        className=' flex h-[22.2rem] w-full  flex-col gap-y-3 overflow-y-scroll  overscroll-y-contain bg-neutral-100 py-10 text-dark'
         id='chatroom'></div>
     </div>
   );

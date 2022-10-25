@@ -65,12 +65,24 @@ export type Lesson = {
   updated_at: Scalars['Date'];
 };
 
+export type Messages = {
+  __typename?: 'Messages';
+  User?: Maybe<User>;
+  created_at: Scalars['Date'];
+  from: Scalars['String'];
+  id: Scalars['String'];
+  message: Scalars['String'];
+  to: Scalars['String'];
+  userId?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   authentication: User;
   createCourse: Course;
   createEnrollment: Enrollment;
   createLesson: Lesson;
+  createMessage: Messages;
   createStep: Step;
   createUser: User;
   createUserGITHUB: User;
@@ -95,6 +107,11 @@ export type MutationCreateEnrollmentArgs = {
 
 export type MutationCreateLessonArgs = {
   input: NewLesson;
+};
+
+
+export type MutationCreateMessageArgs = {
+  input?: InputMaybe<NewMessage>;
 };
 
 
@@ -138,6 +155,12 @@ export type NewLesson = {
   slug?: InputMaybe<Scalars['String']>;
   stepId?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
+};
+
+export type NewMessage = {
+  from: Scalars['String'];
+  message: Scalars['String'];
+  to: Scalars['String'];
 };
 
 export type NewStep = {
@@ -187,11 +210,18 @@ export type Query = {
   __typename?: 'Query';
   courses: Array<Course>;
   enrollments: Array<Enrollment>;
+  getMessages: Array<Messages>;
   getUserByID: User;
   lessons?: Maybe<Array<Maybe<Lesson>>>;
   steps?: Maybe<Array<Maybe<Step>>>;
   userAuthenticated: UserAuthenticated;
   users: Array<User>;
+};
+
+
+export type QueryGetMessagesArgs = {
+  from?: InputMaybe<Scalars['String']>;
+  to?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -232,10 +262,12 @@ export type User = {
   id: Scalars['String'];
   lastname: Scalars['String'];
   location: Scalars['String'];
+  messages: Array<Messages>;
   password: Scalars['String'];
   platform: Platform;
   role: Role;
   site: Scalars['String'];
+  socketID?: Maybe<Scalars['String']>;
   token_user: Scalars['String'];
   twitter: Scalars['String'];
   username: Scalars['String'];
@@ -252,9 +284,11 @@ export type UserAuthenticated = {
   id: Scalars['String'];
   lastname: Scalars['String'];
   location: Scalars['String'];
+  messages: Array<Messages>;
   platform: Platform;
   role: Role;
   site: Scalars['String'];
+  socketID?: Maybe<Scalars['String']>;
   token_user: Scalars['String'];
   twitter: Scalars['String'];
   username: Scalars['String'];
@@ -268,6 +302,15 @@ export type AuthMutationVariables = Exact<{
 
 
 export type AuthMutation = { __typename?: 'Mutation', authentication: { __typename?: 'User', id: string, lastname: string, role: Role, firstname: string, email: string, avatar: string, github: string, platform: Platform, bio: string, location: string, twitter: string, site: string, username: string, token_user: string } };
+
+export type CreateMessageMutationVariables = Exact<{
+  message: Scalars['String'];
+  from: Scalars['String'];
+  to: Scalars['String'];
+}>;
+
+
+export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Messages', id: string } };
 
 export type CreateUserGithubMutationVariables = Exact<{
   firstname?: InputMaybe<Scalars['String']>;
@@ -317,6 +360,14 @@ export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, firstname: string, lastname: string, email: string, avatar: string, password: string, token_user: string, enrollment: Array<{ __typename?: 'Enrollment', id: string }> }> };
+
+export type GetMessagesQueryVariables = Exact<{
+  from: Scalars['String'];
+  to: Scalars['String'];
+}>;
+
+
+export type GetMessagesQuery = { __typename?: 'Query', getMessages: Array<{ __typename?: 'Messages', id: string, message: string, from: string, to: string, created_at: any }> };
 
 export type GetUserAuthenticatedQueryVariables = Exact<{
   token?: InputMaybe<Scalars['String']>;
@@ -383,6 +434,41 @@ export function useAuthMutation(baseOptions?: Apollo.MutationHookOptions<AuthMut
 export type AuthMutationHookResult = ReturnType<typeof useAuthMutation>;
 export type AuthMutationResult = Apollo.MutationResult<AuthMutation>;
 export type AuthMutationOptions = Apollo.BaseMutationOptions<AuthMutation, AuthMutationVariables>;
+export const CreateMessageDocument = gql`
+    mutation createMessage($message: String!, $from: String!, $to: String!) {
+  createMessage(input: {message: $message, from: $from, to: $to}) {
+    id
+  }
+}
+    `;
+export type CreateMessageMutationFn = Apollo.MutationFunction<CreateMessageMutation, CreateMessageMutationVariables>;
+
+/**
+ * __useCreateMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMessageMutation, { data, loading, error }] = useCreateMessageMutation({
+ *   variables: {
+ *      message: // value for 'message'
+ *      from: // value for 'from'
+ *      to: // value for 'to'
+ *   },
+ * });
+ */
+export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateMessageMutation, CreateMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMessageMutation, CreateMessageMutationVariables>(CreateMessageDocument, options);
+      }
+export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
+export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
+export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
 export const CreateUserGithubDocument = gql`
     mutation createUserGITHUB($firstname: String, $lastname: String, $username: String, $avatar: String, $email: String, $github: String, $bio: String, $location: String, $twitter: String, $site: String) {
   createUserGITHUB(
@@ -626,6 +712,46 @@ export function useGetAllUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetAllUsersQueryHookResult = ReturnType<typeof useGetAllUsersQuery>;
 export type GetAllUsersLazyQueryHookResult = ReturnType<typeof useGetAllUsersLazyQuery>;
 export type GetAllUsersQueryResult = Apollo.QueryResult<GetAllUsersQuery, GetAllUsersQueryVariables>;
+export const GetMessagesDocument = gql`
+    query getMessages($from: String!, $to: String!) {
+  getMessages(from: $from, to: $to) {
+    id
+    message
+    from
+    to
+    created_at
+  }
+}
+    `;
+
+/**
+ * __useGetMessagesQuery__
+ *
+ * To run a query within a React component, call `useGetMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMessagesQuery({
+ *   variables: {
+ *      from: // value for 'from'
+ *      to: // value for 'to'
+ *   },
+ * });
+ */
+export function useGetMessagesQuery(baseOptions: Apollo.QueryHookOptions<GetMessagesQuery, GetMessagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMessagesQuery, GetMessagesQueryVariables>(GetMessagesDocument, options);
+      }
+export function useGetMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessagesQuery, GetMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMessagesQuery, GetMessagesQueryVariables>(GetMessagesDocument, options);
+        }
+export type GetMessagesQueryHookResult = ReturnType<typeof useGetMessagesQuery>;
+export type GetMessagesLazyQueryHookResult = ReturnType<typeof useGetMessagesLazyQuery>;
+export type GetMessagesQueryResult = Apollo.QueryResult<GetMessagesQuery, GetMessagesQueryVariables>;
 export const GetUserAuthenticatedDocument = gql`
     query GetUserAuthenticated($token: String) {
   userAuthenticated(input: {token: $token}) {

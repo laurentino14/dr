@@ -1,17 +1,10 @@
-import {createContext, useContext, useEffect, useState} from "react";
+import {createContext, useContext, useState} from "react";
 import io from "socket.io-client";
 import {GetUserByIdDocument} from "../graphql/graphql";
 import {client} from "../http/apollo";
-import {AuthContext, User} from "./AuthContext";
-
-interface SocketContextProps {
-  socket: any;
-  setRoom: (id: string) => void;
-  room: string;
-  messages: Message[] | [];
-  userToSendMessage: User | null;
-  setUserToSendMessage: (user: string) => Promise<void>;
-}
+import {AuthContext} from "./AuthContext";
+import {parseHours} from "./utils/parseHours";
+import {parseMinutes} from "./utils/parseMinuts";
 
 export type Message = {
   id: string;
@@ -25,44 +18,41 @@ type Room = {
   from: string;
 };
 
+interface SocketContextProps {
+  socket: any;
+  messages: Message[] | [];
+  userToSendMessage: any | null;
+  room: string | null;
+  socketConnect: () => void;
+  socketDisconnect: () => void;
+  setUserToSendMessage: (user: string) => void;
+  setUserToSendMessagee: (user: string) => void;
+  sentMessage: (message: string) => void;
+  closeRoom: () => void;
+}
+
 export const SocketContext = createContext({} as SocketContextProps);
 
 export function SocketProvider({children}) {
   const {user} = useContext(AuthContext);
-  const [socketID, setSocketID] = useState(null);
   const [room, setRooom] = useState("");
   let messages: Message[] = [];
   const [userToSendMessage, setUserToSendMessagee] = useState(null);
-  var socket = io("http://localhost:5000");
+  const [notifications, setNotifications] = useState([]);
+  var socket = io("http://localhost:5000", {autoConnect: false});
 
-  function setRoom(id: string) {
-    setRooom(id);
+  function socketConnect() {
+    socket.auth = {userID: user?.id};
+    socket.connect();
   }
-  socket.on("message-in-room", (data: Message) => {
-    document.getElementById("chatroom").innerHTML +=
-      data.from === user.id
-        ? `<div class='w-full px-10 flex justify-end gap-3 items-center'><div class='z-50 flex w-auto max-w-[50%]  items-center justify-end rounded-lg bg-primary px-2 py-2 text-sm font-medium'>
-    ${data.content}
-  </div><p class="h-full w-auto flex items-end font-medium text-xs">${
-    new Date(data.sentAt).getHours().toString() +
-    ":" +
-    new Date(data.sentAt).getMinutes().toString()
-  }</p></div>`
-        : `<div class='w-full px-10 flex justify-start gap-3 items-center'><p class="h-full w-auto flex items-end font-medium text-xs">${
-            new Date(data.sentAt).getHours().toString() +
-            ":" +
-            new Date(data.sentAt).getMinutes().toString()
-          }</p><div class='z-50 flex w-auto max-w-[50%]  items-center justify-end rounded-lg bg-dark px-2 py-2 text-sm font-medium'>
-        ${data.content}
-      </div></div>`;
-    // document.getElementById("chatroom").innerHTML +=
-    //   data.from === user.id
-    //     ? `
-    //     <div className='z-50 flex w-full h-4 items-center justify-end rounded-lg bg-primary px-2 py-2 text-sm font-medium'>
-    //       ${data.content}
-    //     </div>`
-    //     : `<>nao é</>`;
-  });
+
+  if (user?.id) {
+    socketConnect();
+  }
+
+  function socketDisconnect() {
+    socket.disconnect();
+  }
 
   async function setUserToSendMessage(user: string) {
     await client
@@ -70,29 +60,80 @@ export function SocketProvider({children}) {
       .then(res => {
         setUserToSendMessagee(res.data.getUserByID);
         socket.emit("join", {
-          room: `${user} + ${res.data.getUserByID.id}`,
+          room: `${res.data.getUserByID.id + socket.auth.userID}`,
           user2: res.data.getUserByID.id,
         });
-        setRoom(`${user} + ${res.data.getUserByID.id}`);
+        socket.emit("join", {
+          room: `${socket.auth.userID + res.data.getUserByID.id}`,
+          user2: socket.auth.userID,
+        });
+        setRooom(`${socket.auth.userID + res.data.getUserByID.id}`);
       });
   }
 
-  useEffect(() => {
-    socket.emit("userconnect", {
-      userSocketID: socket?.id,
-      userID: user?.id,
+  function sentMessage(message: string) {
+    socket.emit("message", {
+      room: room,
+      message: message,
+      from: user.id,
+      to: userToSendMessage,
     });
-  }, [user]);
+  }
 
+  function closeRoom() {
+    socket.emit("leave", {
+      room: `${userToSendMessage.id + socket.auth.userID}`,
+      room2: `${socket.auth.userID + userToSendMessage.id}`,
+    });
+    socket.disconnect();
+    const leng = document.getElementById("chatroom").children.length;
+    for (let i = 0; i < leng; i++) {
+      document.getElementById("chatroom").children[i].innerHTML = null;
+    }
+    setUserToSendMessagee(null);
+    setRooom("");
+    socket.auth = {userID: user?.id};
+    socket.connect();
+  }
+
+  socket.emit("userconnect", {
+    userID: user?.id,
+    socketID: socket.id,
+  });
+
+  socket.on("connection", data => console.log(data));
+
+  socket.on("Welcome", data => console.log(data));
+  socket.on("private message", data => {
+    document.getElementById("chatroom").innerHTML +=
+      data.from === user.id
+        ? `<div id="msg" class='w-full snap-end px-10 flex justify-end gap-3 items-center'><div class='z-50 flex w-auto max-w-[50%]  items-center justify-end rounded-lg bg-neutral-300 px-2 py-2 text-sm font-medium'>
+  ${data.content}
+</div><p class="h-full w-auto flex items-end font-medium text-xs">${
+            parseHours(data.sentAt) + ":" + parseMinutes(data.sentAt)
+          }</p></div>`
+        : `<div id="msg" class='w-full px-10 snap-end flex justify-start gap-3 items-center'><p class="h-full w-auto flex items-end font-medium text-xs">${
+            parseHours(data.sentAt) + ":" + parseMinutes(data.sentAt)
+          }</p><div class='z-50 flex w-auto max-w-[50%]  items-center justify-end rounded-lg bg-dark text-neutral-100 px-2 py-2 text-sm font-medium'>
+      ${data.content}
+    </div></div>`;
+
+    var element = document.getElementById("chatroom");
+    element.scrollTop = element.scrollHeight;
+  });
   return (
     <SocketContext.Provider
       value={{
         socket,
-        setRoom,
-        room,
-        setUserToSendMessage,
+        setUserToSendMessagee,
         userToSendMessage,
         messages,
+        room,
+        closeRoom,
+        socketConnect,
+        socketDisconnect,
+        setUserToSendMessage,
+        sentMessage,
       }}>
       {children}
     </SocketContext.Provider>

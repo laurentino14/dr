@@ -1,7 +1,10 @@
 import Image from "next/future/image";
 import Link from "next/link";
+import {useContext} from "react";
 import {FaSignOutAlt} from "react-icons/fa";
+import {SocketContext} from "../../../context/SocketContext";
 export const HeaderLogged = ({signOut, user}) => {
+  const {socketDisconnect} = useContext(SocketContext);
   return (
     <>
       <header className='z-50 hidden h-20 w-full items-center justify-around gap-0 bg-dark px-40 text-neutral-300 drop-shadow-2xl lg:flex lg:gap-16 xl:gap-20 2xl:gap-52'>
@@ -69,7 +72,10 @@ export const HeaderLogged = ({signOut, user}) => {
           </Link> */}
 
           <button
-            onClick={e => signOut()}
+            onClick={e => {
+              signOut();
+              socketDisconnect();
+            }}
             className='flex items-center gap-2 text-xl transition-colors hover:text-neutral-100'>
             <FaSignOutAlt className='-mt-[0.1rem]' />
           </button>

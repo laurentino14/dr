@@ -99,21 +99,19 @@ export function AuthProvider({children}) {
             push("/app");
           });
       } catch {
-        setUser(null);
-        cookie.remove("auth");
+        signOut();
       }
     }
   }, [data]);
 
   useEffect(() => {
     const token = cookie.get("auth");
-
     if (token) {
       try {
         client
           .query({
             query: GetUserAuthenticatedDocument,
-            variables: {token: String(token)},
+            variables: {token: token},
           })
           .then(data =>
             setUser({
@@ -134,40 +132,37 @@ export function AuthProvider({children}) {
             }),
           );
       } catch (err) {
-        setUser(null);
-        cookie.remove("auth");
+        signOut();
       }
     } else {
-      setUser(null);
-      cookie.remove("auth");
+      signOut();
     }
   }, []);
 
   async function signIn({email, password}: signInData) {
-    await reqUser({variables: {email: email, password: password}}).then(res => {
-      setUser({
-        id: res.data.authentication.id,
-        email: res.data.authentication.email,
-        avatar: res.data.authentication.avatar,
-        bio: res.data.authentication.bio,
-        github: res.data.authentication.github,
-        location: res.data.authentication.location,
-        platform: res.data.authentication.platform,
-        role: res.data.authentication.role,
-        site: res.data.authentication.site,
-        twitter: res.data.authentication.twitter,
-        username: res.data.authentication.username,
-        firstname: res.data.authentication.firstname,
-        lastname: res.data.authentication.lastname,
-        token_user: res.data.authentication.token_user,
-      });
-
-      cookie.set("auth", res.data.authentication.token_user, {
-        expires: 60 * 60 * 24 * 2,
-      });
-
-      reload();
-    });
+    await reqUser({variables: {email: email, password: password}})
+      .then(res => {
+        setUser({
+          id: res.data.authentication.id,
+          email: res.data.authentication.email,
+          avatar: res.data.authentication.avatar,
+          bio: res.data.authentication.bio,
+          github: res.data.authentication.github,
+          location: res.data.authentication.location,
+          platform: res.data.authentication.platform,
+          role: res.data.authentication.role,
+          site: res.data.authentication.site,
+          twitter: res.data.authentication.twitter,
+          username: res.data.authentication.username,
+          firstname: res.data.authentication.firstname,
+          lastname: res.data.authentication.lastname,
+          token_user: res.data.authentication.token_user,
+        });
+        cookie.set("auth", res.data.authentication.token_user, {
+          expires: 60 * 60 * 24 * 2,
+        });
+      })
+      .finally(() => push("/app"));
   }
 
   function signOut() {
@@ -175,7 +170,7 @@ export function AuthProvider({children}) {
     cookie.remove("auth");
 
     setTimeout(() => {
-      reload();
+      push("/signin");
     }, 500);
   }
 
