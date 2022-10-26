@@ -8,6 +8,7 @@ import {SocketProvider} from "../context/SocketContext";
 import {client} from "../http/apollo";
 import "../styles/global.css";
 import "../styles/tailwind.css";
+
 function MyApp({
   Component,
   pageProps: {session, ...pageProps},

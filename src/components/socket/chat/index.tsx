@@ -27,7 +27,7 @@ export const Chat = () => {
         className={` ${open ? "h-[34rem] drop-shadow-2xl " : "h-0"}  ${
           user ? "opacity-100" : "opacity-0"
         } fixed bottom-0 right-40 z-50 flex w-[40rem] flex-col rounded-t-lg transition-all delay-200 duration-500`}>
-        <div className='flex h-14 w-full items-center justify-between rounded-t-lg bg-dark px-4 drop-shadow-xl'>
+        <div className='flex h-14 w-full items-center justify-between rounded-t-lg  bg-dark px-4 drop-shadow-xl'>
           <div className='flex h-full items-center gap-2 pt-1'>
             <AiFillWechat className='  text-3xl text-primary' />
             <h1 className='text-sm font-light text-neutral-100'>Conversas</h1>
@@ -46,13 +46,13 @@ export const Chat = () => {
           <MyContactsChat />
         )}
 
-        <div className=' group z-20 flex h-20 items-center justify-between  drop-shadow-2xl  '>
-          <div className=' flex h-full w-24 items-center justify-center gap-4 bg-dark text-neutral-100 '>
+        <div className=' group  flex h-20 items-center justify-between  drop-shadow-2xl  '>
+          <div className=' z-50 flex h-full w-24 items-center justify-center gap-4 bg-dark text-neutral-100 shadow-2xl shadow-black drop-shadow-2xl '>
             <BsEmojiLaughing />
             <ImAttachment />
           </div>
           <textarea
-            onKeyDown={e => {
+            onKeyDown={async e => {
               if (e.key === "Enter") {
                 e.preventDefault();
                 socket.emit("private message", {
@@ -60,7 +60,6 @@ export const Chat = () => {
                   to: userToSendMessage.id,
                   from: user.id,
                   room: room,
-                  room1: userToSendMessage.id + user.id,
                 });
                 setTextAreaValue("");
               }

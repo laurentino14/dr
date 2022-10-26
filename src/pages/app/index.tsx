@@ -24,7 +24,7 @@ export default function App() {
           <MyCourses nav={nav} />
         </section>
       </main>
-      <Chat user={user} />
+      <Chat />
     </>
   );
 }
