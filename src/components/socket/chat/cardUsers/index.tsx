@@ -1,13 +1,10 @@
 import Image from "next/image";
-import {useContext, useEffect} from "react";
+import {useContext} from "react";
 import {SocketContext} from "../../../../context/SocketContext";
 
 export const CardUsersChat = ({user}) => {
   const {setUserToSendMessage, userToSendMessage} = useContext(SocketContext);
 
-  useEffect(() => {
-    console.log(userToSendMessage);
-  }, [userToSendMessage]);
   return (
     <button
       onClick={() => {

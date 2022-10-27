@@ -38,17 +38,26 @@ export function SocketProvider({children}) {
   const [messages, setMessages] = useState([]);
   const [room, setRoom] = useState<string | null>(null);
 
-  const socket = io("http://localhost:5000", {autoConnect: false});
+  const socket = io("http://localhost:5000", {
+    autoConnect: false,
+    reconnection: false,
+    transports: ["websocket"],
+    multiplex: false,
+  });
   var usersOnline = [];
-
+  socket.auth = {userID: user?.id};
+  socket.connect();
   async function socketConnect() {
     socket.auth = {userID: user?.id};
     socket.connect();
   }
 
-  if (user?.id) {
-    socketConnect();
-  }
+  // useEffect(() => {
+  //   if (!socket.connected && user?.id) {
+  //     socket.auth = {userID: user?.id};
+  //     socket.connect();
+  //   }
+  // }, [user]);
 
   async function socketDisconnect() {
     socket.disconnect();
@@ -89,41 +98,38 @@ export function SocketProvider({children}) {
 
   async function closeRoom() {
     const roomId = await generateRoomId(user?.id, userToSendMessage.id);
-    console.log(roomId, " =>>>>>> room");
+    // console.log(roomId, " =>>>>>> room");
     socket.emit("leave", {
       room: roomId,
       secondUser: userToSendMessage.id,
     });
 
-    socket.off("private message");
-
     setUserToSendMessagee(null);
     setRoom("");
   }
 
-  socket.on("user connected", async user => {
-    let a = {
-      userID: user.userID,
-      socketID: user.socketID,
-      self: user.socketID === socket.id,
-      connected: true,
-    };
-    usersOnline.push(a);
+  // socket.on("user connected", async user => {
+  //   let a = {
+  //     userID: user.userID,
+  //     socketID: user.socketID,
+  //     self: user.socketID === socket.id,
+  //     connected: true,
+  //   };
+  //   usersOnline.push(a);
 
-    usersOnline = usersOnline.sort((a, b) => {
-      if (a.self) return -1;
-      if (b.self) return 1;
-      if (a.userID < b.userID) return -1;
-      return a.userID > b.userID ? 1 : 0;
-    });
+  //   usersOnline = usersOnline.sort((a, b) => {
+  //     if (a.self) return -1;
+  //     if (b.self) return 1;
+  //     if (a.userID < b.userID) return -1;
+  //     return a.userID > b.userID ? 1 : 0;
+  //   });
 
-    console.log(usersOnline);
-  });
+  //   console.log(usersOnline);
+  // });
 
-  socket.on("users", users => {
-    users.forEach(user => {
-      user.self = user.socketID === socket.id;
-
+  socket.on("users", async users => {
+    usersOnline = [];
+    await users.forEach(user => {
       usersOnline.push({
         userID: user.userID,
         socketID: user.socketID,
@@ -132,13 +138,22 @@ export function SocketProvider({children}) {
       });
     });
 
-    usersOnline = users.sort((a, b) => {
+    usersOnline = await usersOnline.sort((a, b) => {
       if (a.self) return -1;
       if (b.self) return 1;
       if (a.userID < b.userID) return -1;
       return a.userID > b.userID ? 1 : 0;
     });
-    console.log(usersOnline);
+    let myUser = await usersOnline.find(
+      item => item.socketID === socket.id && item.userID === user?.id,
+    );
+    usersOnline = await usersOnline.filter(item => item.userID !== user?.id);
+    usersOnline.unshift(myUser);
+    console.log(usersOnline, " =>>>>>> usersOnline2");
+  });
+
+  socket.on("connect", () => {
+    console.log(socket);
   });
 
   socket.on("private message", async data => {

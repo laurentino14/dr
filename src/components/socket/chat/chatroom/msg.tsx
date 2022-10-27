@@ -9,7 +9,7 @@ export const Msg = ({message, room, user}) => {
           id='msg'
           key={message.id}
           className='box-border  flex h-auto max-h-max w-full max-w-[100%] snap-end items-center justify-end gap-3  px-5'>
-          <div className='z-40 h-auto max-h-max min-h-max w-auto max-w-[70%] whitespace-pre-wrap break-words rounded-lg bg-neutral-300 px-4 py-4 text-sm font-medium leading-relaxed text-black antialiased will-change-scroll'>
+          <div className='z-40 h-auto max-h-max min-h-max w-auto max-w-[70%] whitespace-pre-wrap break-words rounded-lg bg-neutral-300 px-4 py-4 text-sm font-medium leading-relaxed text-black antialiased  will-change-scroll'>
             {message.content}
           </div>
           <p className='flex h-full w-auto items-end text-xs font-medium'>

@@ -26,7 +26,7 @@ export const Chat = () => {
       <div
         className={` ${open ? "h-[34rem] drop-shadow-2xl " : "h-0"}  ${
           user ? "opacity-100" : "opacity-0"
-        } fixed bottom-0 right-40 z-50 flex w-[40rem] flex-col rounded-t-lg transition-all delay-200 duration-500`}>
+        } fixed bottom-0 right-40 z-50 flex w-[40rem] flex-col rounded-t-lg transition-all delay-200 duration-500 will-change-transform`}>
         <div className='flex h-14 w-full items-center justify-between rounded-t-lg  bg-dark px-4 drop-shadow-xl'>
           <div className='flex h-full items-center gap-2 pt-1'>
             <AiFillWechat className='  text-3xl text-primary' />
@@ -52,7 +52,7 @@ export const Chat = () => {
             <ImAttachment />
           </div>
           <textarea
-            onKeyDown={async e => {
+            onKeyDown={e => {
               if (e.key === "Enter") {
                 e.preventDefault();
                 socket.emit("private message", {
