@@ -2,11 +2,11 @@ import {useContext, useState} from "react";
 import {AuthContext} from "../../../../context/AuthContext";
 import {SocketContext} from "../../../../context/SocketContext";
 import {useGetAllUsersQuery} from "../../../../graphql/graphql";
-import {CardUsersChat} from "../cardUsers";
+import {CardUsersChat, CardUsersChatOnline} from "../cardUsers";
 
 export const MyContactsChat = () => {
-  const {userToSendMessage} = useContext(SocketContext);
-  const {user} = useContext(AuthContext);
+  const {userToSendMessage, onlineRef} = useContext(SocketContext);
+  const {user: userAuthenticated} = useContext(AuthContext);
   const [users, setUsers] = useState([]);
   const {data} = useGetAllUsersQuery();
 
@@ -19,9 +19,34 @@ export const MyContactsChat = () => {
       <div
         id='ccardsdiv'
         className=' flex h-full flex-col gap-3 overflow-y-auto py-4'>
-        {data?.users?.map(user => (
-          <CardUsersChat user={user} key={user.id + Math.random()} />
-        ))}
+        {data?.users?.map(user => {
+          const a = onlineRef?.current?.find(
+            userOnline => userOnline?.userID === user.id,
+          );
+          console.log(onlineRef?.current);
+          if (user.id === userAuthenticated?.id) {
+            return <></>;
+          }
+
+          if (a) {
+            return (
+              <CardUsersChatOnline user={user} key={user.id + Math.random()} />
+            );
+          }
+        })}
+        {data?.users?.map(user => {
+          const a = onlineRef?.current?.find(
+            userOnline => userOnline?.userID === user.id,
+          );
+          console.log(onlineRef?.current);
+          if (user.id === userAuthenticated?.id) {
+            return <></>;
+          }
+
+          if (!a) {
+            return <CardUsersChat user={user} key={user.id + Math.random()} />;
+          }
+        })}
       </div>
     </div>
   );

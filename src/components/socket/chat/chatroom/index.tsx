@@ -9,9 +9,10 @@ type ChatProps = {
   messages: Message[];
 };
 
-export const ChatRoom = ({userTo}) => {
+export const ChatRoom = ({userTo, onlineRef}) => {
   const {closeRoom, messages, room} = useContext(SocketContext);
   const {user} = useContext(AuthContext);
+  const verify = onlineRef?.current?.find(us => us.userID === userTo.id);
 
   useEffect(() => {
     var a = document.getElementById("chatroom");
@@ -22,13 +23,20 @@ export const ChatRoom = ({userTo}) => {
     <div className='h-full w-full bg-neutral-100'>
       <div className=' relative z-50 flex h-14 w-auto items-center gap-4 bg-neutral-100 py-10 pl-8 drop-shadow-sm'>
         {userTo?.avatar ? (
-          <Image
-            className=' rounded-full'
-            src={userTo?.avatar}
-            width={50}
-            height={50}
-            alt=''
-          />
+          <div className='relative flex items-center'>
+            <Image
+              className=' rounded-full'
+              src={userTo?.avatar}
+              width={50}
+              height={50}
+              alt=''
+            />
+            {verify ? (
+              <div className='absolute -bottom-0 right-0 h-4 w-4 rounded-full border-2 border-neutral-200 bg-green-500' />
+            ) : (
+              <></>
+            )}
+          </div>
         ) : (
           <></>
         )}
@@ -38,7 +46,7 @@ export const ChatRoom = ({userTo}) => {
           </h1>
           <h1 className='text-xs'>{userTo.bio}</h1>
         </div>
-        <div className='absolute right-8 flex h-14 w-20 items-center justify-center'>
+        <div className='absolute right-5 flex h-14 w-20 items-center justify-center'>
           <button onClick={async () => await closeRoom()}>
             <IoMdClose className='text-3xl hover:text-neutral-600' />
           </button>

@@ -11,7 +11,8 @@ import {MyContactsChat} from "./myContacts";
 export const Chat = () => {
   const [open, setOpen] = useState(false);
   const [textAreaValue, setTextAreaValue] = useState("");
-  const {userToSendMessage, socket, room} = useContext(SocketContext);
+  const {userToSendMessage, socket, room, onlineRef} =
+    useContext(SocketContext);
   const {user} = useContext(AuthContext);
 
   return (
@@ -41,7 +42,7 @@ export const Chat = () => {
           </button>
         </div>
         {userToSendMessage ? (
-          <ChatRoom userTo={userToSendMessage} />
+          <ChatRoom userTo={userToSendMessage} onlineRef={onlineRef} />
         ) : (
           <MyContactsChat />
         )}

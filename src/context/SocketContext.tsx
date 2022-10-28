@@ -1,8 +1,9 @@
 import {createContext, useContext, useRef, useState} from "react";
-import io from "socket.io-client";
+import io, {Socket} from "socket.io-client";
 import {GetUserByIdDocument} from "../graphql/graphql";
 import {client} from "../http/apollo";
 import {AuthContext} from "./AuthContext";
+import {userFilter} from "./utils/usersFilter";
 
 export type Message = {
   id: string;
@@ -10,14 +11,10 @@ export type Message = {
   content: string;
   from: string;
 };
-type Room = {
-  room: string;
-  messages: Message[];
-  from: string;
-};
 
 interface SocketContextProps {
-  socket: any;
+  socket: Socket;
+  onlineRef: any;
   messages: Message[] | [];
   userToSendMessage: any | null;
   room: string;
@@ -35,11 +32,13 @@ export function SocketProvider({children}) {
   const [notifications, setNotifications] = useState([]);
   const [room, setRoom] = useState("");
   const roomRef = useRef(room);
+  const onlineRef = useRef(usersOnline);
   roomRef.current = room;
 
   const socket = io("http://localhost:5000", {
     autoConnect: false,
     reconnection: false,
+    protocols: ["websocket"],
     multiplex: false,
   });
   if (user?.id) {
@@ -58,39 +57,18 @@ export function SocketProvider({children}) {
 
   socket.on("users", users => {
     usersOnline = [];
-    users.forEach(user => {
-      usersOnline.push({
-        userID: user.userID,
-        socketID: user.socketID,
-        connected: user.connected,
-        self: user.socketID === socket.id,
-      });
-    });
 
-    usersOnline = usersOnline.sort((a, b) => {
-      if (a.self) return -1;
-      if (b.self) return 1;
-      if (a.userID < b.userID) return -1;
-      return a.userID > b.userID ? 1 : 0;
-    });
-    let myUser = usersOnline.find(
-      item => item.socketID === socket.id && item.userID === user?.id,
-    );
-    usersOnline = usersOnline.filter(item => item.userID !== user?.id);
-
-    usersOnline.unshift(myUser);
-
+    usersOnline = userFilter(users, user, socket);
+    onlineRef.current = usersOnline;
     console.log(usersOnline, " =>>>>>> usersOnline");
   });
+
   socket.on("private message", async data => {
     if (roomRef.current === data.room) {
       setMessages(messages => [...messages, data]);
     }
     if (roomRef.current !== data.room) {
       alert("You have a new message from " + data.from);
-
-      //   setMessages(messages => [...messages, data]);
-      //   setNotifications(notifications => [...notifications, data]);
     }
   });
 
@@ -133,6 +111,7 @@ export function SocketProvider({children}) {
     <SocketContext.Provider
       value={{
         socket,
+        onlineRef,
         setUserToSendMessagee,
         userToSendMessage,
         messages,
