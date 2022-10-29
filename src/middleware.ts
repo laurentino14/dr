@@ -1,5 +1,16 @@
 import type {NextRequest} from "next/server";
 import {NextResponse} from "next/server";
+
+type Admin = {
+  id: string;
+  name: string;
+  email: string;
+  permissions: {
+    level: number;
+    name: string;
+  };
+};
+
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get("auth");
 
@@ -7,6 +18,7 @@ export async function middleware(request: NextRequest) {
     if (!token) {
       return NextResponse.redirect(new URL("/signin", request.nextUrl.origin));
     }
+
     return NextResponse.next();
   }
 

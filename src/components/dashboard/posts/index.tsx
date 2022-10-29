@@ -1,4 +1,4 @@
-import Image from "next/image";
+import {Avatar} from "@chakra-ui/react";
 import {useState} from "react";
 import {
   BsChatTextFill,
@@ -35,12 +35,7 @@ export const PostsDashboard = ({user, post}: Props) => {
       <aside className='flex w-1/4 flex-col items-start justify-start'>
         <div className='flex w-full items-center px-3 drop-shadow-lg'>
           <div className='ml-6 rounded-full drop-shadow-xl'>
-            <Image
-              className='rounded-full'
-              src={user?.avatar}
-              width={100}
-              height={100}
-            />
+            <Avatar src={user?.avatar} size='xl' />
           </div>
         </div>
         <h1 className='ml-7 mt-4 w-full font-medium text-dark'>
@@ -87,7 +82,7 @@ export const PostsDashboard = ({user, post}: Props) => {
         </div>
         <div
           className={` ${
-            read ? "h-full max-h-full overflow-y-auto" : " h-96 max-h-96"
+            read ? "h-full max-h-full " : " h-96 max-h-96"
           } relative mt-8  flex  flex-col gap-4 overflow-hidden transition-all delay-100 duration-1000`}>
           <p className='text-justify'>
             Contrary to popular belief, Lorem Ipsum is not simply random text.
@@ -172,8 +167,8 @@ export const PostsDashboard = ({user, post}: Props) => {
             />
             <p
               className={`${
-                like ? "w-0 opacity-0" : "w-10 opacity-100"
-              } text-left delay-100 duration-300`}>
+                like ? "w-0 opacity-0" : "w-12 opacity-100"
+              }  flex h-2 items-center text-left delay-100 duration-300`}>
               Curtir
             </p>
           </button>
@@ -194,7 +189,7 @@ export const PostsDashboard = ({user, post}: Props) => {
             <p
               className={`${
                 comment ? "w-0 opacity-0" : "w-20  opacity-100"
-              } text-left delay-100 duration-300`}>
+              } flex h-2 items-center text-left delay-100 duration-300`}>
               Comentar
             </p>
           </button>
@@ -209,7 +204,7 @@ export const PostsDashboard = ({user, post}: Props) => {
             <p
               className={`${
                 share ? "w-0 opacity-0" : "w-32 opacity-100"
-              } delay-100 duration-300`}>
+              } flex h-2 items-center delay-100 duration-300`}>
               Compartilhar
             </p>
           </button>

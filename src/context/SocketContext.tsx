@@ -3,8 +3,8 @@ import io, {Socket} from "socket.io-client";
 import {GetUserByIdDocument} from "../graphql/graphql";
 import {client} from "../http/apollo";
 import {AuthContext} from "./AuthContext";
+import {ToastNewMessage} from "./utils/toast/newMessage";
 import {userFilter} from "./utils/usersFilter";
-
 export type Message = {
   id: string;
   sentAt: Date;
@@ -18,6 +18,8 @@ interface SocketContextProps {
   messages: Message[] | [];
   userToSendMessage: any | null;
   room: string;
+  open: boolean;
+  setOpen: (value: boolean) => void;
   setUserToSendMessage: (user: string) => void;
   setUserToSendMessagee: (user: string) => void;
   closeRoom: () => void;
@@ -29,10 +31,12 @@ export function SocketProvider({children}) {
   const {user} = useContext(AuthContext);
   const [userToSendMessage, setUserToSendMessagee] = useState<null | any>(null);
   const [messages, setMessages] = useState([]);
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState(0);
   const [room, setRoom] = useState("");
+  const [open, setOpen] = useState(false);
   const roomRef = useRef(room);
   const onlineRef = useRef(usersOnline);
+  // const toast = useToast({duration: 3000, isClosable: true, position: "top"});
   roomRef.current = room;
 
   const socket = io("http://localhost:5000", {
@@ -55,7 +59,7 @@ export function SocketProvider({children}) {
 
   socket.on("message", data => console.log(data));
 
-  socket.on("users", users => {
+  socket.on("users", async users => {
     usersOnline = [];
 
     usersOnline = userFilter(users, user, socket);
@@ -68,7 +72,18 @@ export function SocketProvider({children}) {
       setMessages(messages => [...messages, data]);
     }
     if (roomRef.current !== data.room) {
-      alert("You have a new message from " + data.from);
+      await client
+        .query({query: GetUserByIdDocument, variables: {id: data.from}})
+        .then(res => {
+          console.log(res);
+          ToastNewMessage({
+            notifications,
+            user: res.data.getUserByID,
+            setUserToSendMessage,
+            setNotifications,
+            setOpen,
+          });
+        });
     }
   });
 
@@ -115,6 +130,8 @@ export function SocketProvider({children}) {
         setUserToSendMessagee,
         userToSendMessage,
         messages,
+        open,
+        setOpen,
         room,
         closeRoom,
         setUserToSendMessage,
